@@ -39,15 +39,7 @@ const NavigationItems = [
         url: '/customer',
         icon: 'ti ti-dashboard',
         breadcrumbs: false
-      }
-    ]
-  },
-  {
-    id: 'elements',
-    title: 'Elements',
-    type: 'group',
-    icon: 'icon-navigation',
-    children: [
+      },
       {
         id: 'Profile',
         title: 'Profile',
