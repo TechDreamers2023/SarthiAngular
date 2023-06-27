@@ -1,0 +1,12 @@
+
+<google-map #myGoogleMap width="100%" class="map-container" [center]="center" [options]="options">
+    <map-marker #markerElem="mapMarker" 
+     *ngFor="let markerPosition of markerPositions"
+    [position]="markerPosition">
+    </map-marker>  
+</google-map>
+<!-- 
+<span>
+    current latitude : {{currentlatitude}}<br />
+    current Longitude : {{currentlongitude}}<br />
+</span> -->
