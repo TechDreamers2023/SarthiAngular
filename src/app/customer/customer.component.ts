@@ -10,7 +10,6 @@ import { SharedModule } from 'src/app/theme/shared/shared.module';
 import { NgbNavChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 
 // third party
-import { NgApexchartsModule } from 'ng-apexcharts';
 import ApexCharts from 'apexcharts';
 import {
   ApexAxisChartSeries,

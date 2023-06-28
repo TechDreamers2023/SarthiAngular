@@ -10,23 +10,23 @@ const routes: Routes = [
   {
     path: '',
     component: LoginComponent,
-    
-    },
+  },
   {
-  path: '',
-  component: AdminComponent,
-  children: [
-    {
-      path: 'customer',
-      redirectTo: '/customer',
-      pathMatch: 'full'
-    },
-    {
-      path: 'customer',
-      component: CustomerComponent
-    },
-    
-  ],
+    path: '',
+    component: AdminComponent,
+    children: [
+      {
+        path: 'customer',
+        redirectTo: '/customer',
+        pathMatch: 'full'
+      },
+      {
+        path: 'customer',
+        component: CustomerComponent
+      },
+      
+
+    ],
   },
   {
     path: '',
@@ -53,4 +53,4 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }

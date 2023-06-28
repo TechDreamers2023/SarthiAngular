@@ -22,13 +22,24 @@
           <div class="saprator mt-3">
             <span>or</span>
           </div> -->
+          <from [formGroup]="loginForm">
           <h5 class="my-4 d-flex justify-content-center"> Sign in with Email address </h5>
           <div class="form-floating mb-3">
-            <input type="email" class="form-control" id="floatingInput" value="info@sarthitowing.com" />
+            <input type="email" class="form-control" id="floatingInput" name="emailAddress"  formControlName="emailAddress" value="info@sarthitowing.com" [(ngModel)]="logCredentials.emailAddress" />
+            <div *ngIf=" emailAddress && emailAddress.invalid && emailAddress.touched" class="invalid-feedback">
+              <div *ngIf="emailAddress.errors?.['required']">
+                This field is required.
+              </div>
+            </div>
             <label for="floatingInput">Email address / Username</label>
           </div>
           <div class="form-floating mb-3">
-            <input type="password" class="form-control" id="password" value="12345" />
+            <input type="password" class="form-control" id="password" formControlName="password" value="12345" [(ngModel)]="logCredentials.password" />
+            <div *ngIf=" password && password.invalid && password.touched" class="invalid-feedback">
+              <div *ngIf="password.errors?.['required']">
+                This field is required.
+              </div>
+            </div>
             <label for="password">Password</label>
           </div>
           <div class="d-flex mt-1 justify-content-between">
@@ -41,8 +52,9 @@
             </h5>
           </div>
           <div class="d-grid mt-4">
-            <button type="button" class="btn btn-secondary" (click)="onLogin()">Sign In</button>
+            <button type="button" class="btn btn-secondary" [disabled]="loginForm.invalid" (click)="onLogin()" >Sign In</button>
           </div>
+        </from>
           <hr />
           <h5 class="d-flex justify-content-center">
             <a [routerLink]="['/guest/register']">Don't have an account?</a>
