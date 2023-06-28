@@ -165,11 +165,11 @@ export class CustomerComponent {
 
   ngOnInit() {
     this.getCurrentRequestStatus(1);
-    // this.timerSubscription = timer(0, 20000).subscribe((res) => {
-    //   if (res) {
-    //     this.getCurrentRequestStatus(1); 
-    //   }
-    // }); 
+    this.timerSubscription = timer(0, 20000).subscribe((res) => {
+      if (res) {
+        this.getCurrentRequestStatus(1); 
+      }
+    }); 
   }
 
   ngOnDestroy() { this.timerSubscription.unsubscribe(); }
@@ -192,8 +192,11 @@ export class CustomerComponent {
               this.showLocationFilter = true;
             }
           }
-          if (this.responces.status == 0 || this.responces.status == 2) {
+          if (this.responces.status == 0) {
             this.toastr.error(response.message)
+          }
+          if (this.responces.status == 2) {
+            this.showLocationFilter = true;
           }
         },
         (error) => {
