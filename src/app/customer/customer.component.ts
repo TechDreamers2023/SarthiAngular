@@ -24,6 +24,10 @@ import {
   ApexTooltip
 } from 'ng-apexcharts';
 import { BerryConfig } from '../app-config';
+import { CustomerService } from '../services/customer/customer.service';
+import { ToastrService } from 'ngx-toastr';
+import { Observable, Subscription, map, timer } from 'rxjs';
+
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
@@ -37,12 +41,13 @@ export type ChartOptions = {
   tooltip: ApexTooltip;
   stroke: ApexStroke;
 };
+
 @Component({
   selector: 'app-customer',
   templateUrl: './customer.component.html',
- // imports: [CommonModule, SharedModule, NgApexchartsModule],
-  styleUrls: ['./customer.component.scss']
+   styleUrls: ['./customer.component.scss']
 })
+
 export class CustomerComponent {
   navCollapsed: boolean;
   navCollapsedMob: boolean;
@@ -59,7 +64,10 @@ tovalue : PlaceSearchResult | undefined;
   windowWidth: number;
 
 // Constructor
-constructor(private zone: NgZone, private location: Location, private locationStrategy: LocationStrategy) {
+constructor(private zone: NgZone, private location: Location, 
+  private locationStrategy: LocationStrategy,
+  private customerService: CustomerService,
+  private toastr: ToastrService) {
 
   let current_url = this.location.path();
   if (this.location['_baseHref']) {
@@ -151,16 +159,57 @@ constructor(private zone: NgZone, private location: Location, private locationSt
       }
     ]
   };
-}
+} 
 
-// Life cycle events
+timerSubscription!: Subscription; 
+
 ngOnInit(): void {
-  setTimeout(() => {
-    this.monthChart = new ApexCharts(document.querySelector('#tab-chart-1'), this.monthOptions);
-    this.monthChart.render();
-  }, 500);
-}
 
+  this.timerSubscription = Observable.timer(0, 1000).pipe( map(() => {  this.getCurrentRequestStatus(1); 
+     
+}
+  ))}
+ 
+ngOnDestroy(): void { this.timerSubscription.unsubscribe(); } 
+
+responces: any;
+  getCurrentRequestStatus(customerId : number) {
+    this.customerService.GetCurrentStatusByCustomer(customerId)
+      .subscribe(
+        (response) => {       
+          debugger;                     
+          this.responces = response;
+          console.log(response);
+          // if (this.responces.status == 1) {
+          //   if (this.responces.data[0].usertypeId === 2 ||
+          //     this.responces.data[0].usertypeId ===  4) {
+          //     this.toastr.success(response.message)
+          //     localStorage.setItem("UserID", this.responces.data[0].userId);
+          //     localStorage.setItem("UserTypeID", this.responces.data[0].usertypeId);
+          //     localStorage.setItem("User", this.responces.data[0].firstName);
+          //     localStorage.setItem("UserName", this.responces.data[0].firstName + " " + this.responces.data[0].firstName);
+          //     if(this.responces.data[0].usertypeId === 2)
+          //     {
+          //     this.router.navigate(['/customer']);
+          //     }
+          //     else if(this.responces.data[0].usertypeId === 4)
+          //     {
+          //       this.router.navigate(['/vendor']);
+          //     }
+          //   }
+          // }
+          // if (this.responces.status == 0 || this.responces.status == 2) {
+          //   this.toastr.error(response.message)
+          // }
+        },
+        (error) => {
+          this.toastr.error("Something went wrong, Please try Again ")                    //error() callback
+          console.log("Something went wrong")
+        },
+        () => {                                   //complete() callback
+          console.log("Completed")
+        })
+  }
 // public Method
 onNavChange(changeEvent: NgbNavChangeEvent) {
   if (changeEvent.nextId === 1) {
