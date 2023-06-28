@@ -155,11 +155,23 @@ constructor(private zone: NgZone, private location: Location, private locationSt
 
 // Life cycle events
 ngOnInit(): void {
+<<<<<<< Updated upstream
   setTimeout(() => {
     this.monthChart = new ApexCharts(document.querySelector('#tab-chart-1'), this.monthOptions);
     this.monthChart.render();
   }, 500);
 }
+=======
+//   this.timerSubscription = Observable.timer(0, 1000).pipe( map(() => {  this.getCurrentRequestStatus(1); 
+// }
+//   ))
+const intervalID = setInterval(() => {
+  this.getCurrentRequestStatus(1);
+}, 1000);
+}
+ 
+ngOnDestroy(): void { this.timerSubscription.unsubscribe(); } 
+>>>>>>> Stashed changes
 
 // public Method
 onNavChange(changeEvent: NgbNavChangeEvent) {
