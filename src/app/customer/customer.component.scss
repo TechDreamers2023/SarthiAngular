@@ -5,4 +5,58 @@
     background: rgba(0, 0, 0, 0.15);
   }
   .map-container {position: relative; width:100% !important;}
-  
+  .f-34 {
+    font-size: 28px;
+}
+.dashnum-card .round.small {
+  top: -125px;
+  right: -15px;
+  opacity: .5;
+}
+
+.dashnum-card .round {
+  position: absolute;
+  background: inherit;
+  border-radius: 50%;
+  width: 210px;
+  overflow: hidden;
+  height: 210px;
+  z-index: 1;
+}
+.dashnum-card {
+  position: relative;
+}
+
+.dashnum-card .round.big {
+  top: -85px;
+  right: -95px;
+}
+
+.dashnum-card .round {
+  position: absolute;
+  background: inherit;
+  border-radius: 50%;
+  width: 210px;
+  overflow: hidden;
+  height: 210px;
+  z-index: 1;
+}
+
+.dashnum-card .card-body {
+  position: relative;
+  z-index: 5;
+}
+
+.dashnum-card .avtar:not([class*=bg-]) {
+  background: rgba(0,0,0,.15);
+}
+
+.overflow-hidden {
+  overflow: hidden!important;
+}
+.dashnum-card .round:after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,.17);
+}
