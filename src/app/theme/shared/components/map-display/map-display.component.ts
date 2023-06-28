@@ -67,7 +67,7 @@ export class MapDisplayComponent implements OnInit {
     console.log('dragEnd');
   }
 
-  getCurrentLocation() {debugger
+  getCurrentLocation() {
     return new Promise((resolve, reject) => {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(

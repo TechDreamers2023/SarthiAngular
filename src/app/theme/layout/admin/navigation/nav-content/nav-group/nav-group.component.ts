@@ -20,7 +20,9 @@ export class NavGroupComponent implements OnInit {
   constructor(private zone: NgZone, private location: Location, private locationStrategy: LocationStrategy) {}
 
   // Life cycle events
+  userName:any;
   ngOnInit() {
+    this.userName = localStorage.getItem("User");
     // at reload time active and trigger link
     let current_url = this.location.path();
     const baseHref = this.locationStrategy.getBaseHref();

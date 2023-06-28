@@ -24,7 +24,7 @@ export default class LoginComponent {
   }
   loginForm!: FormGroup;
   ngOnInit(): void {
-    if(localStorage.getItem("IsLogin") != undefined){
+    if(localStorage.getItem("UserID") != undefined){
       this.router.navigate(['/customer']);
     }
     this.loginForm =  this.fb.group({
@@ -40,7 +40,7 @@ export default class LoginComponent {
     return this.loginForm.get('password');
   }
   responces:any;
-  getcall(){debugger
+  getcall(){
     this.login.getUser(this.logCredentials)
         .subscribe(
           (response) => {                           //next() callback
@@ -49,7 +49,9 @@ export default class LoginComponent {
             if(this.responces.status == 1){
               if(this.responces.data[0].usertypeId === 2){
                 this.toastr.success(response.message)
-                localStorage.setItem("IsLogin","true")
+                localStorage.setItem("UserID",this.responces.data[0].userId);
+                localStorage.setItem("User", this.responces.data[0].firstName);
+                localStorage.setItem("UserName",this.responces.data[0].firstName + " "+ this.responces.data[0].firstName);
                 this.router.navigate(['/customer']);
 
               }
