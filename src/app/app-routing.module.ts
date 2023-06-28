@@ -4,6 +4,7 @@ import { AdminComponent } from './theme/layout/admin/admin.component';
 import { GuestComponent } from './theme/layout/guest/guest.component';
 import { CustomerComponent } from './customer/customer.component';
 import LoginComponent from './demo/pages/authentication/login/login.component';
+import { VendorComponent } from './vendor/vendor.component';
 
 
 const routes: Routes = [
@@ -24,7 +25,15 @@ const routes: Routes = [
         path: 'customer',
         component: CustomerComponent
       },
-      
+      {
+        path: 'vendor',
+        redirectTo: '/vendor',
+        pathMatch: 'full'
+      },
+      {
+        path: 'vendor',
+        component: VendorComponent
+      },
 
     ],
   },
@@ -35,6 +44,10 @@ const routes: Routes = [
   {
     path: '',
     loadChildren: () => import('./customer/customer.module').then(m => m.CustomerModule)
+  },
+  {
+    path: '',
+    loadChildren: () => import('./vendor/vendor.module').then(m => m.VendorModule)
   },
 
   {
