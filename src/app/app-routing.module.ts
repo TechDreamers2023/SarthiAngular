@@ -5,12 +5,17 @@ import { GuestComponent } from './theme/layout/guest/guest.component';
 import { CustomerComponent } from './customer/customer.component';
 import LoginComponent from './demo/pages/authentication/login/login.component';
 import { VendorComponent } from './vendor/vendor.component';
+import { LogoutComponent } from './demo/pages/authentication/logout/logout.component';
 
 
 const routes: Routes = [
   {
     path: '',
     component: LoginComponent,
+  },
+  {
+    path: 'logout',
+    component: LogoutComponent,
   },
   {
     path: '',

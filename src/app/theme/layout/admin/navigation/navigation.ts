@@ -61,13 +61,14 @@ const NavigationItems = [
         title: 'Logout',
         type: 'item',
         classes: 'nav-item',
-        url: 'https://tabler-icons.io/',
+        url: '/logout',
         icon: 'ti ti-plant-2',
         target: true,
         external: true
       }
     ]
   }
+  
   //,
   // {
   //   id: 'page',
@@ -163,9 +164,12 @@ const NavigationItems = [
   // }
 ];
 
+
+
 @Injectable()
 export class NavigationItem {
   get() {
     return NavigationItems;
   }
 }
+
