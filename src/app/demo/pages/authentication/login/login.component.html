@@ -26,12 +26,13 @@
           <h5 class="my-4 d-flex justify-content-center"> Sign in with Email address </h5>
           <div class="form-floating mb-3">
             <input type="email" class="form-control" id="floatingInput" name="emailAddress"  formControlName="emailAddress" value="info@sarthitowing.com" [(ngModel)]="logCredentials.emailAddress" />
-            <div *ngIf=" emailAddress && emailAddress.invalid && emailAddress.touched" class="invalid-feedback">
-              <div *ngIf="emailAddress.errors?.['required']">
-                This field is required.
-              </div>
-            </div>
+           
             <label for="floatingInput">Email address / Username</label>
+          </div>
+          <div class="form-floating mb-3" *ngIf=" emailAddress && emailAddress.invalid && emailAddress.touched" class="invalid-feedback">
+            <div *ngIf="emailAddress.errors?.['required']">
+              This field is required.
+            </div>
           </div>
           <div class="form-floating mb-3">
             <input type="password" class="form-control" id="password" formControlName="password" value="12345" [(ngModel)]="logCredentials.password" />

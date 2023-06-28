@@ -24,6 +24,9 @@ export default class LoginComponent {
   }
   loginForm!: FormGroup;
   ngOnInit(): void {
+    if(localStorage.getItem("IsLogin") != undefined){
+      this.router.navigate(['/customer']);
+    }
     this.loginForm =  this.fb.group({
       emailAddress: new FormControl('', [Validators.required]),
       password: new FormControl('',[Validators.required]),
@@ -45,10 +48,14 @@ export default class LoginComponent {
             console.log(response);
             if(this.responces.status == 1){
               if(this.responces.data[0].usertypeId === 2){
-                this.toastr.success("Hello, I'm the toastr message.")
+                this.toastr.success(response.message)
+                localStorage.setItem("IsLogin","true")
                 this.router.navigate(['/customer']);
 
               }
+            }
+            if(this.responces.status == 0){
+               this.toastr.error(response.message)
             }
           },
           (error) => {          
