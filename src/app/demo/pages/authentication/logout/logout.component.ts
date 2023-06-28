@@ -10,9 +10,10 @@ import { ToastrService } from 'ngx-toastr';
 export class LogoutComponent {
   constructor(private router : Router,
     private toastr: ToastrService,) {}
-  ngOnInit(){debugger
+
+  ngOnInit(){
     this.toastr.success("Logout Suucessfully");  
-  localStorage.clear();
-  this.router.navigate(['/login']);
+    localStorage.clear();
+    this.router.navigate(['/login']);
 }
 }

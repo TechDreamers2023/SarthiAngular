@@ -63,8 +63,8 @@ const NavigationItems = [
         classes: 'nav-item',
         url: '/logout',
         icon: 'ti ti-plant-2',
-        target: true,
-        external: true
+        target: false,
+        external: false
       }
     ]
   }

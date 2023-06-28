@@ -27,6 +27,7 @@ import { BerryConfig } from '../app-config';
 import { CustomerService } from '../services/customer/customer.service';
 import { ToastrService } from 'ngx-toastr';
 import { Observable, Subscription, map, timer } from 'rxjs';
+import { Router } from '@angular/router';
 
 
 export type ChartOptions = {
@@ -64,10 +65,12 @@ export class CustomerComponent {
   windowWidth: number;
 
   // Constructor
-  constructor(private zone: NgZone, private location: Location,
+  constructor(private zone: NgZone, 
+    private location: Location,
     private locationStrategy: LocationStrategy,
     private customerService: CustomerService,
-    private toastr: ToastrService) {
+    private toastr: ToastrService,
+    private router: Router) {
 
     let current_url = this.location.path();
     if (this.location['_baseHref']) {
@@ -164,16 +167,21 @@ export class CustomerComponent {
   timerSubscription!: any;
 
   ngOnInit() {
-    this.getCurrentRequestStatus(1);
-    this.timerSubscription = timer(0, 20000).subscribe((res) => {
-      if (res) {
-        this.getCurrentRequestStatus(1); 
-      }
-    }); 
+
+    if (localStorage.getItem("UserTypeID") != undefined) {
+      var customerId = +localStorage.getItem("UserTypeID");
+      this.getCurrentRequestStatus(customerId);
+      this.timerSubscription = timer(0, 20000).subscribe((res) => {
+        if (res) {
+          this.getCurrentRequestStatus(customerId); 
+        }
+      }); 
+    }
+    else{
+      this.router.navigate(['/login']);
+    }
   }
-
-  ngOnDestroy() { this.timerSubscription.unsubscribe(); }
-
+ 
   responces: any;
   showLocationFilter: boolean = true;
 
