@@ -166,7 +166,9 @@ export class VendorComponent {
       //Check shift status..
       this.getShiftStatus();
 
-      //Check request is accept or not..
+      this.getGetVendorActiveRequest();
+
+      //Check request is accept or not.. After customer request is accepted, save every 1 min location data...
       this.timerSubscription = timer(0, 60000).subscribe((res) => {
         if (res) {
           this.saveVendorLocation();
@@ -190,7 +192,28 @@ export class VendorComponent {
         }
       },
       error: err => {
-        this.toastr.error('Something went wrong... Please try again!', 'Error!');
+        console.log(err);
+      }
+    });
+  }
+
+  getGetVendorActiveRequest() {
+    this.vendorService.getGetVendorActiveRequest().subscribe({
+      next: res => {
+        if (res.status == 1) {
+          if (res.data) {
+
+          }
+          else {
+            //data not found
+          }
+        }
+        else {
+          this.toastr.error(res.message, 'Error!');
+        }
+      },
+      error: err => {
+        console.log(err);
       }
     });
   }

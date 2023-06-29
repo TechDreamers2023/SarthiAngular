@@ -18,9 +18,13 @@ export class VendorService {
     public manageShift(): Observable<any> {
         return this.http.get<any>(environment.devurl + "/api/Vendor/ManageVendorShifts?vendorId=" + localStorage.getItem("UserID"), { 'headers': headers });
     }
-    
+
     public getShiftStatus(): Observable<any> {
         return this.http.get<any>(environment.devurl + "/api/Vendor/CheckVendorShiftStatus?vendorId=" + localStorage.getItem("UserID"), { 'headers': headers });
+    }
+
+    public getGetVendorActiveRequest(): Observable<any> {
+        return this.http.get<any>(environment.devurl + "/api/Vendor/GetVendorActiveRequest?vendorId=" + localStorage.getItem("UserID"), { 'headers': headers });
     }
 
     public saveVendorLocation(data: any): Observable<any> {
