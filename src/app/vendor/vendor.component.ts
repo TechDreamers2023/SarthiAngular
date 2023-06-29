@@ -162,16 +162,17 @@ export class VendorComponent {
 
   // Life cycle events
   ngOnInit(): void {
-    //Check shift status..
-    this.getShiftStatus();
+    if (localStorage.getItem("UserTypeID") != undefined && localStorage.getItem("UserTypeID") == "7") {
+      //Check shift status..
+      this.getShiftStatus();
 
-    //Check request is accept or not..
-    this.timerSubscription = timer(0, 60000).subscribe((res) => {
-      if (res) {
-        this.saveVendorLocation();
-      }
-    });
-
+      //Check request is accept or not..
+      this.timerSubscription = timer(0, 60000).subscribe((res) => {
+        if (res) {
+          this.saveVendorLocation();
+        }
+      });
+    }
   }
 
   getShiftStatus() {
@@ -184,7 +185,8 @@ export class VendorComponent {
         }
         else {
           this.IsShiftStarted = true;
-          localStorage.setItem('_shiftId', JSON.stringify(res.data));
+          localStorage.setItem('_shiftId', res.data);
+          //localStorage.setItem('_shiftId', JSON.stringify(res.data));
         }
       },
       error: err => {
@@ -195,10 +197,10 @@ export class VendorComponent {
 
   saveVendorLocation() {
     const data = {
-      vendorId: 7,
+      vendorId: localStorage.getItem("UserID"),
       currentLatitude: 0,
       currentLongitude: 0,
-      shiftId: JSON.parse(localStorage.getItem('_shiftId') || '{}'),
+      shiftId: localStorage.getItem("_shiftId"),
       requestId: 1
     }
 
