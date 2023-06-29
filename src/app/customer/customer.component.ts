@@ -28,6 +28,7 @@ import { CustomerService } from '../services/customer/customer.service';
 import { ToastrService } from 'ngx-toastr';
 import { Observable, Subscription, map, timer } from 'rxjs';
 import { Router } from '@angular/router';
+import { Title } from '@angular/platform-browser';
 
 
 export type ChartOptions = {
@@ -62,10 +63,11 @@ export class CustomerComponent {
   colorChart = ['#673ab7'];
   fromvalue: PlaceSearchResult | undefined;
   tovalue: PlaceSearchResult | undefined;
-  windowWidth: number;
-
+  windowWidth: number; 
+  customerId : number;
+  customerTypeId : number;
   // Constructor
-  constructor(private zone: NgZone, 
+  constructor(private zone: NgZone,
     private location: Location,
     private locationStrategy: LocationStrategy,
     private customerService: CustomerService,
@@ -169,19 +171,20 @@ export class CustomerComponent {
   ngOnInit() {
 
     if (localStorage.getItem("UserTypeID") != undefined) {
-      var customerId = +localStorage.getItem("UserTypeID");
-      this.getCurrentRequestStatus(customerId);
-      this.timerSubscription = timer(0, 20000).subscribe((res) => {
+      this.customerTypeId = +localStorage.getItem("UserTypeID");
+      this.customerId = +localStorage.getItem("UserID");
+      this.getCurrentRequestStatus(this.customerId);
+      this.timerSubscription = timer(0, 50000).subscribe((res) => {
         if (res) {
-          this.getCurrentRequestStatus(customerId); 
+          this.getCurrentRequestStatus(this.customerId);
         }
-      }); 
+      });
     }
-    else{
+    else {
       this.router.navigate(['/login']);
     }
   }
- 
+
   responces: any;
   showLocationFilter: boolean = true;
 
@@ -194,7 +197,6 @@ export class CustomerComponent {
           if (this.responces.status == 1) {
             if (this.responces.data.currentStageId < 8) {
               this.showLocationFilter = false;
-              console.log(this.showLocationFilter);
             }
             else {
               this.showLocationFilter = true;
@@ -368,7 +370,7 @@ export class CustomerComponent {
       }
     }
   };
-
+ 
   // public method
   navMobClick() {
     if (this.navCollapsedMob && (document.querySelector('app-navigation.coded-navbar') as HTMLDivElement).classList.contains('mob-open')) {

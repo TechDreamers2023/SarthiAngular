@@ -1,8 +1,9 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { PlaceSearchResult } from '../../../../customer/model/place-search-result';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { PlaceSearchResult, RequestViewModel } from '../../../../customer/model/place-search-result';
 import { GoogleMap, MapDirectionsService } from '@angular/google-maps';
 import { map } from 'rxjs';
-
+import { CustomerService } from 'src/app/services/customer/customer.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-map-display',
@@ -11,9 +12,7 @@ import { map } from 'rxjs';
 })
 
 export class MapDisplayComponent implements OnInit {
-  
   zoom = 5;
-
   @ViewChild('myGoogleMap', { static: false })
   map!: GoogleMap;
 
@@ -21,50 +20,87 @@ export class MapDisplayComponent implements OnInit {
   @Input() to: PlaceSearchResult | undefined;
 
   markerPositions: google.maps.LatLng[] = [];
-  currentlatitude!: number;
-  currentlongitude!: number;
-
+  mapOptions: google.maps.MapOptions;
   center = {
     lat: 0,
-    lng:0
+    lng: 0
   };
+
+  markers: any = {};
+  position = [];
+  polylineOptions: any = {};
+  currentLat: number;
+  currentlong: number;
+  CustomerId: number;
 
   options: google.maps.MapOptions = {
     zoomControl: true,
     scrollwheel: true,
     disableDoubleClickZoom: true,
-    minZoom: 15,
+    minZoom: 5,
   };
 
-  constructor(private directionService: MapDirectionsService) {
+  requestViewModel: RequestViewModel = new RequestViewModel();
 
+  constructor(
+    private directionService: MapDirectionsService,
+    private customerService: CustomerService,
+    private toastr: ToastrService) {
   }
 
- ngOnChanges() {
+  ngOnChanges() {
     const fromLocation = this.from?.location;
-     if (fromLocation) {
+    const toLocation = this.to?.location;
+
+    if (fromLocation) {
       this.gotoLocation(fromLocation);
-    } 
+    }
+
+    if (toLocation) {
+      this.gotoLocation(toLocation);
+    }
+
+    if (fromLocation && toLocation) {
+      this.setRoutePolyline();
+      this.requestViewModel.currentlat = parseFloat(this.center.lat.toString());
+      this.requestViewModel.currentlong = parseFloat(this.center.lng.toString());
+      this.requestViewModel.pickuplat = parseFloat(fromLocation.lat().toString());
+      this.requestViewModel.pickuplong = parseFloat(fromLocation.lng().toString());
+      this.requestViewModel.dropOfflat = parseFloat(toLocation.lat().toString());
+      this.requestViewModel.dropOfflong = parseFloat(toLocation.lng().toString());
+      this.requestViewModel.userId = 1;
+
+      this.customerService.GenerateServiceRequest(this.requestViewModel).subscribe((response) => {
+        if (response.status == 0 || response.status == 2) {
+          this.toastr.error(response.message)
+        }
+        if (response.status == 1) {
+          this.toastr.success(response.message)
+        }
+        console.log(response);
+      },
+        (error) => {
+          this.toastr.error("Something went wrong, Please try Again ") //error() callback
+        },
+        () => { //complete() callback
+        })
+    }
   }
 
   gotoLocation(location: google.maps.LatLng) {
-    console.log(location);
-    this.markerPositions = [location];
+    var loc = { lat: location.lat(), lng: location.lng() }
+    this.position.push(loc)
     this.map.panTo(location);
-    this.zoom = 17;
-    
-   }
- 
-
-  async ngOnInit() {
-    const position: any = await this.getCurrentLocation();
-    this.gotoLocation(position);
-    // this.currentlatitude = position.coords.latitude;
-    // this.currentlongitude = position.coords.latitude;
+    this.markers = {
+      position: this.position,
+      zoom: 5,
+      zoomControl: true,
+      scrollwheel: true,
+    }
   }
 
-  markerDragEnd($event: any) {
-    console.log('dragEnd');
+  async ngOnInit() {
+    await this.getCurrentLocation();
   }
 
   getCurrentLocation() {
@@ -77,11 +113,20 @@ export class MapDisplayComponent implements OnInit {
                 lat: position.coords.latitude,
                 lng: position.coords.longitude
               };
-              
+              this.mapOptions = {
+                center: this.center,
+                zoom: 17,
+                zoomControl: true,
+                scrollwheel: true,
+              }
+
+              let location = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+
+              this.gotoLocation(location)
               resolve(this.center);
             }
           },
-          (error) => console.log(error)
+          (error) => this.toastr.error(error.message)
         );
       } else {
         reject('Geolocation is not supported by this browser.');
@@ -89,5 +134,12 @@ export class MapDisplayComponent implements OnInit {
     });
   }
 
-  
+  setRoutePolyline() {
+    this.polylineOptions = {
+      path: this.position.slice(1),
+      strokeColor: 'blue',
+      strokeOpacity: 1.0,
+      strokeWeight: 2,
+    };
+  }
 } 
