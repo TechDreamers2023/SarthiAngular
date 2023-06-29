@@ -172,9 +172,13 @@ export class VendorComponent {
       next: res => {
         this.IsShiftStarted = res.data;
 
-        //localStorage.removeItem('_shiftId');
         //this._shiftId = JSON.parse(localStorage.getItem('_shiftId') || '{}').shiftId;
-        localStorage.setItem('_shiftId', JSON.stringify(res.data));
+        if (res.data == 0) {
+          localStorage.removeItem('_shiftId');
+        }
+        else {
+          localStorage.setItem('_shiftId', JSON.stringify(res.data));
+        }
       },
       error: err => {
         this.toastr.error('Something went wrong... Please try again!', 'Error!');
