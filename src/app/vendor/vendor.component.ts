@@ -171,6 +171,10 @@ export class VendorComponent {
     this.vendorService.getShiftStatus().subscribe({
       next: res => {
         this.IsShiftStarted = res.data;
+
+        //localStorage.removeItem('_shiftId');
+        //this._shiftId = JSON.parse(localStorage.getItem('_shiftId') || '{}').shiftId;
+        localStorage.setItem('_shiftId', JSON.stringify(res.data));
       },
       error: err => {
         this.toastr.error('Something went wrong... Please try again!', 'Error!');
@@ -350,6 +354,10 @@ export class VendorComponent {
         if (res.status == 1) {
           this.toastr.success(res.message, 'Success!');
           this.IsShiftStarted = !this.IsShiftStarted;
+
+          //localStorage.removeItem('_shiftId');
+          //this._shiftId = JSON.parse(localStorage.getItem('_shiftId') || '{}').shiftId;
+          localStorage.setItem('_shiftId', JSON.stringify(res.data));
         }
         else {
           this.toastr.error(res.message, 'Error!');
