@@ -27,6 +27,7 @@ import { BerryConfig } from '../app-config';
 import { PlaceSearchResult } from './model/place-search-result';
 import { VendorService } from '../services/vendors/vendor.service';
 import { ToastrService } from 'ngx-toastr';
+import { timer } from 'rxjs';
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
@@ -62,6 +63,8 @@ export class VendorComponent {
   windowWidth: number;
 
   IsShiftStarted: boolean = false;
+  timerSubscription!: any;
+
   // Constructor
   constructor(private zone: NgZone, private location: Location, private locationStrategy: LocationStrategy, private vendorService: VendorService, private toastr: ToastrService) {
 
@@ -159,15 +162,15 @@ export class VendorComponent {
 
   // Life cycle events
   ngOnInit(): void {
-    setTimeout(() => {
-      this.monthChart = new ApexCharts(document.querySelector('#tab-chart-1'), this.monthOptions);
-      this.monthChart.render();
-    }, 500);
-
     //Check shift status..
     this.getShiftStatus();
 
     //Check request is accept or not..
+    this.timerSubscription = timer(0, 60000).subscribe((res) => {
+      if (res) {
+        this.saveVendorLocation();
+      }
+    });
 
   }
 
@@ -190,20 +193,26 @@ export class VendorComponent {
     });
   }
 
-  // public Method
-  onNavChange(changeEvent: NgbNavChangeEvent) {
-    if (changeEvent.nextId === 1) {
-      setTimeout(() => {
-        this.monthChart = new ApexCharts(document.querySelector('#tab-chart-1'), this.monthOptions);
-        this.monthChart.render();
-      }, 200);
+  saveVendorLocation() {
+    const data = {
+      vendorId: 7,
+      currentLatitude: 0,
+      currentLongitude: 0,
+      shiftId: JSON.parse(localStorage.getItem('_shiftId') || '{}'),
+      requestId: 1
     }
 
-    if (changeEvent.nextId === 2) {
-      setTimeout(() => {
-        this.yearChart = new ApexCharts(document.querySelector('#tab-chart-2'), this.yearOptions);
-        this.yearChart.render();
-      }, 200);
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          if (position) {
+            data.currentLatitude = position.coords.latitude
+            data.currentLongitude = position.coords.longitude
+
+            this.vendorService.saveVendorLocation(data).subscribe();
+          }
+        }
+      );
     }
   }
 
