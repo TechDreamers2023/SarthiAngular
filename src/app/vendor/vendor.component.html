@@ -5,8 +5,10 @@
       <span class="round bg-warning big"></span>
       <div class="card-body p-3">
         <div class="d-flex align-items-center">
-          <button class="btn btn-primary w-100" *ngIf="!IsShiftStarted" (click)="manageShift()">Start Shift</button>
-          <button class="btn btn-danger w-100" *ngIf="IsShiftStarted" (click)="manageShift()">End Shift</button>
+          <button type="button" class="btn btn-primary w-100" *ngIf="!IsShiftStarted" (click)="manageShift()">Start
+            Shift</button>
+          <button type="button" class="btn btn-danger w-100" *ngIf="IsShiftStarted" (click)="manageShift()">End
+            Shift</button>
         </div>
       </div>
     </div>
@@ -14,7 +16,8 @@
       <div class="card-body">
         <div class="row mb-3 align-items-center">
           <div class="col">
-            <h4>Customer's Request</h4>
+            <h4 class="float-left">Customer's Request</h4>
+            <button type="button" class="btn btn-sm btn-primary float-right">View All</button>
           </div>
         </div>
         <ul class="list-group list-group-flush">
@@ -34,9 +37,6 @@
             </div>
           </li>
         </ul>
-        <div class="text-center">
-          <a href="javascripr:" class="b-b-primary text-primary">View all <i class="ti ti-chevron-right"></i></a>
-        </div>
       </div>
     </div>
   </div>

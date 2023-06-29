@@ -13,13 +13,17 @@ const headers = new HttpHeaders()
 })
 export class VendorService {
 
-    constructor(
-        private http: HttpClient
-    ) { }
+    constructor(private http: HttpClient) { }
+
     public manageShift(): Observable<any> {
-        return this.http.get<any>(environment.devurl + "/api/Vendor/ManageVendorShifts?vendorId=7", { 'headers': headers });
+        return this.http.get<any>(environment.devurl + "/api/Vendor/ManageVendorShifts?vendorId=" + localStorage.getItem("UserID"), { 'headers': headers });
     }
+    
     public getShiftStatus(): Observable<any> {
-        return this.http.get<any>(environment.devurl + "/api/Vendor/CheckVendorShiftStatus?vendorId=7", { 'headers': headers });
+        return this.http.get<any>(environment.devurl + "/api/Vendor/CheckVendorShiftStatus?vendorId=" + localStorage.getItem("UserID"), { 'headers': headers });
+    }
+
+    public saveVendorLocation(data: any): Observable<any> {
+        return this.http.post<any>(environment.devurl + "/api/Vendor/SaveVendorLocations", data, { 'headers': headers });
     }
 }
