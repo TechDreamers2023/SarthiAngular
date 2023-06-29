@@ -164,19 +164,23 @@ export class VendorComponent {
       this.monthChart.render();
     }, 500);
 
+    //Check shift status..
     this.getShiftStatus();
+
+    //Check request is accept or not..
+
   }
 
   getShiftStatus() {
     this.vendorService.getShiftStatus().subscribe({
       next: res => {
-        this.IsShiftStarted = res.data;
-
         //this._shiftId = JSON.parse(localStorage.getItem('_shiftId') || '{}').shiftId;
-        if (res.data == 0) {
+        if (res.data == null) {
+          this.IsShiftStarted = false;
           localStorage.removeItem('_shiftId');
         }
         else {
+          this.IsShiftStarted = true;
           localStorage.setItem('_shiftId', JSON.stringify(res.data));
         }
       },
