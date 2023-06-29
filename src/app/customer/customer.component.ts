@@ -63,9 +63,9 @@ export class CustomerComponent {
   colorChart = ['#673ab7'];
   fromvalue: PlaceSearchResult | undefined;
   tovalue: PlaceSearchResult | undefined;
-  windowWidth: number; 
-  customerId : number;
-  customerTypeId : number;
+  windowWidth: number;
+  customerId: number;
+  customerTypeId: number;
   // Constructor
   constructor(private zone: NgZone,
     private location: Location,
@@ -193,9 +193,13 @@ export class CustomerComponent {
       .subscribe(
         (response) => {
           this.responces = response;
-          console.log(this.responces);
           if (this.responces.status == 1) {
             if (this.responces.data.currentStageId < 8) {
+              if (this.responces.data.currentStageId == 2) {
+                //Show Quoations
+                console.log('Show Quoations');
+                this.loadAllQuoations();
+              }
               this.showLocationFilter = false;
             }
             else {
@@ -214,9 +218,45 @@ export class CustomerComponent {
           console.log("Something went wrong")
         },
         () => {                                   //complete() callback
-          console.log("Completed")
+
         })
   }
+
+  loadAllQuoations() {
+    this.customerService.GetAllQuotationRequest(this.customerId)
+    .subscribe(
+      (response) => {
+        console.log(response);
+
+        // if (this.responces.status == 1) {
+        //   if (this.responces.data.currentStageId < 8) {
+        //     if (this.responces.data.currentStageId == 2) {
+        //       //Show Quoations
+        //       console.log('Show Quoations');
+        //       this.loadAllQuoations();
+        //     }
+        //     this.showLocationFilter = false;
+        //   }
+        //   else {
+        //     this.showLocationFilter = true;
+        //   }
+        // }
+        // if (this.responces.status == 0) {
+        //   this.toastr.error(response.message)
+        // }
+        // if (this.responces.status == 2) {
+        //   this.showLocationFilter = true;
+        // }
+      },
+      (error) => {
+        this.toastr.error("Something went wrong, Please try Again ")                    //error() callback
+        console.log("Something went wrong")
+      },
+      () => {                                   //complete() callback
+
+      })
+  }
+
   // public Method
   onNavChange(changeEvent: NgbNavChangeEvent) {
     if (changeEvent.nextId === 1) {
@@ -370,7 +410,11 @@ export class CustomerComponent {
       }
     }
   };
- 
+
+  ontriggerRequestChanged(data) {
+    this.getCurrentRequestStatus(this.customerId);
+  }
+
   // public method
   navMobClick() {
     if (this.navCollapsedMob && (document.querySelector('app-navigation.coded-navbar') as HTMLDivElement).classList.contains('mob-open')) {

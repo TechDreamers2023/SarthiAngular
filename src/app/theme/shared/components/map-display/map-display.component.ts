@@ -18,7 +18,7 @@ export class MapDisplayComponent implements OnInit {
 
   @Input() from: PlaceSearchResult | undefined;
   @Input() to: PlaceSearchResult | undefined;
-
+  @Output() triggerRequestChanged = new EventEmitter<boolean>();
   markerPositions: google.maps.LatLng[] = [];
   mapOptions: google.maps.MapOptions;
   center = {
@@ -76,6 +76,7 @@ export class MapDisplayComponent implements OnInit {
         }
         if (response.status == 1) {
           this.toastr.success(response.message)
+          this.triggerRequestChanged.emit(true);
         }
         console.log(response);
       },

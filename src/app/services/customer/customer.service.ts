@@ -25,4 +25,8 @@ export class CustomerService {
 
     return this.http.post<any>(environment.devurl + "/api/Request/GenerateServiceRequest", requestViewModel, { 'headers': headers });
   }
+
+  public GetAllQuotationRequest(customerId: number): Observable<any> {
+    return this.http.get<any>(environment.devurl + "/api/Request/GetAllQuotationRequest?customerId=" + customerId);
+  }
 }
