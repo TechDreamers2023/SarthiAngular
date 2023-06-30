@@ -12,7 +12,7 @@
         </div>
       </div>
     </div>
-    <div class="card" *ngIf="requestData">
+    <div class="card" *ngIf="requestData && IsShiftStarted && requestData.currentStageId > 0">
       <div class="card-body">
         <div class="row mb-3 align-items-center">
           <div class="col">
