@@ -24,7 +24,7 @@ export class VendorService {
     }
 
     public getGetVendorActiveRequest(): Observable<any> {
-        return this.http.get<any>(environment.devurl + "/api/Vendor/GetVendorActiveRequest?vendorId=" + localStorage.getItem("UserID"), { 'headers': headers });
+        return this.http.get<any>(environment.devurl + "/api/Vendor/GetVendorActiveRequest?vendorUserId=" + localStorage.getItem("UserID"), { 'headers': headers });
     }
 
     public saveVendorLocation(data: any): Observable<any> {

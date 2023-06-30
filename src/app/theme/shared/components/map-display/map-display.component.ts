@@ -70,6 +70,8 @@ export class MapDisplayComponent implements OnInit {
       this.requestViewModel.dropOfflong = parseFloat(toLocation.lng().toString());
       this.requestViewModel.userId = 1;
 
+      console.log(this.requestViewModel);
+
       this.customerService.GenerateServiceRequest(this.requestViewModel).subscribe((response) => {
         if (response.status == 0 || response.status == 2) {
           this.toastr.error(response.message)

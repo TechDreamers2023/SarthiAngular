@@ -28,6 +28,7 @@ import { PlaceSearchResult } from './model/place-search-result';
 import { VendorService } from '../services/vendors/vendor.service';
 import { ToastrService } from 'ngx-toastr';
 import { timer } from 'rxjs';
+import { Router } from '@angular/router';
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
@@ -64,9 +65,14 @@ export class VendorComponent {
 
   IsShiftStarted: boolean = false;
   timerSubscription!: any;
+  vendorStatusSubscription!: any;
 
   // Constructor
-  constructor(private zone: NgZone, private location: Location, private locationStrategy: LocationStrategy, private vendorService: VendorService, private toastr: ToastrService) {
+  constructor(private zone: NgZone, private location: Location,
+    private locationStrategy: LocationStrategy,
+    private vendorService: VendorService,
+    private toastr: ToastrService,
+    private router: Router) {
 
     let current_url = this.location.path();
     if (this.location['_baseHref']) {
@@ -162,33 +168,43 @@ export class VendorComponent {
 
   // Life cycle events
   ngOnInit(): void {
-    if (localStorage.getItem("UserTypeID") != undefined && localStorage.getItem("UserTypeID") == "7") {
+    if (localStorage.getItem("UserTypeID") != undefined) {
       //Check shift status..
       this.getShiftStatus();
-
-      this.getGetVendorActiveRequest();
-
-      //Check request is accept or not.. After customer request is accepted, save every 1 min location data...
-      this.timerSubscription = timer(0, 60000).subscribe((res) => {
-        if (res) {
-          this.saveVendorLocation();
-        }
-      });
+    }
+    else {
+      this.router.navigate(['/login']);
     }
   }
+
+  ngOnDestroy(): void { 
+    clearInterval( this.timerSubscription);
+    clearInterval( this.vendorStatusSubscription);
+   }
 
   getShiftStatus() {
     this.vendorService.getShiftStatus().subscribe({
       next: res => {
-        //this._shiftId = JSON.parse(localStorage.getItem('_shiftId') || '{}').shiftId;
         if (res.data == null) {
           this.IsShiftStarted = false;
           localStorage.removeItem('_shiftId');
+          clearInterval( this.timerSubscription);
+          clearInterval( this.vendorStatusSubscription);
         }
         else {
           this.IsShiftStarted = true;
           localStorage.setItem('_shiftId', res.data);
-          //localStorage.setItem('_shiftId', JSON.stringify(res.data));
+          this.saveVendorLocation();
+          this.getGetVendorActiveRequest()
+          this.timerSubscription = setInterval(() => {
+            const res = 
+            this.saveVendorLocation();
+            }, 100000);
+
+            this.vendorStatusSubscription = setInterval(() => {
+              const res = 
+              this.getGetVendorActiveRequest();
+              }, 50000);
         }
       },
       error: err => {
@@ -198,8 +214,10 @@ export class VendorComponent {
   }
 
   getGetVendorActiveRequest() {
+    console.log("Vendor Active Request Called");
     this.vendorService.getGetVendorActiveRequest().subscribe({
       next: res => {
+        console.log(res);
         if (res.status == 1) {
           if (res.data) {
 
@@ -208,7 +226,7 @@ export class VendorComponent {
             //data not found
           }
         }
-        else {
+        else if (res.status == 0) {
           this.toastr.error(res.message, 'Error!');
         }
       },
@@ -219,6 +237,7 @@ export class VendorComponent {
   }
 
   saveVendorLocation() {
+    console.log("Save Location Called");
     const data = {
       vendorId: localStorage.getItem("UserID"),
       currentLatitude: 0,
@@ -233,7 +252,6 @@ export class VendorComponent {
           if (position) {
             data.currentLatitude = position.coords.latitude
             data.currentLongitude = position.coords.longitude
-
             this.vendorService.saveVendorLocation(data).subscribe();
           }
         }
@@ -394,12 +412,8 @@ export class VendorComponent {
     this.vendorService.manageShift().subscribe({
       next: res => {
         if (res.status == 1) {
+          this.getShiftStatus();
           this.toastr.success(res.message, 'Success!');
-          this.IsShiftStarted = !this.IsShiftStarted;
-
-          //localStorage.removeItem('_shiftId');
-          //this._shiftId = JSON.parse(localStorage.getItem('_shiftId') || '{}').shiftId;
-          localStorage.setItem('_shiftId', JSON.stringify(res.data));
         }
         else {
           this.toastr.error(res.message, 'Error!');

@@ -174,7 +174,7 @@ export class CustomerComponent {
       this.customerTypeId = +localStorage.getItem("UserTypeID");
       this.customerId = +localStorage.getItem("UserID");
       this.getCurrentRequestStatus(this.customerId);
-      this.timerSubscription = timer(0, 50000).subscribe((res) => {
+      this.timerSubscription = timer(0, 20000).subscribe((res) => {
         if (res) {
           this.getCurrentRequestStatus(this.customerId);
         }
