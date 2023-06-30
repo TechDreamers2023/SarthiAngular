@@ -30,4 +30,16 @@ export class VendorService {
     public saveVendorLocation(data: any): Observable<any> {
         return this.http.post<any>(environment.devurl + "/api/Vendor/SaveVendorLocations", data, { 'headers': headers });
     }
+
+    public rejectQuotation(data: any): Observable<any> {
+        return this.http.post<any>(environment.devurl + "/api/Vendor/RejectQuotationByVendor", data, { 'headers': headers });
+    }
+
+    public accceptQuotation(data: any): Observable<any> {
+        return this.http.post<any>(environment.devurl + "/api/Vendor/AccpetQuotationByVendor", data, { 'headers': headers });
+    }
+
+    public UpdateRequestStatus(data: any): Observable<any> {
+        return this.http.post<any>(environment.devurl + "/api/Vendor/UpdateRequestStatus", data, { 'headers': headers });
+    }
 }
