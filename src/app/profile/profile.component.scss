@@ -1,0 +1,55 @@
+.form-control, .custom-select, .dataTable-selector, .dataTable-input {
+    display: block;
+    width: 100%;
+    padding: 0.65rem 0.75rem;
+    font-size: .875rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #212529;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #9aa4b2;
+    -webkit-appearance: none;
+    appearance: none;
+    border-radius: 6px;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+input, button, select, optgroup, textarea {
+    margin: 0;
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+} 
+ 
+ 
+.form-group label {
+    margin-bottom: 0.5rem;
+}
+
+.form-group label {
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.form-label {
+    margin-bottom: 0.5rem;
+    color: #212529;
+}
+
+label {
+    display: inline-block;
+}
+
+*, *:before, *:after {
+    box-sizing: border-box;
+}
+ 
+.was-validated .form-control:invalid, .was-validated .custom-select:invalid, .was-validated .dataTable-selector:invalid, .was-validated .dataTable-input:invalid, .form-control.is-invalid, .is-invalid.custom-select, .is-invalid.dataTable-selector, .is-invalid.dataTable-input {
+    border-color: #f44336;
+    padding-right: calc(1.5em + 1.3rem);
+    background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIGZpbGw9JyNmNDQzMzYnIHZpZXdCb3g9Jy0yIC0yIDcgNyc+PHBhdGggc3Ryb2tlPScjZjQ0MzM2JyBkPSdNMCAwbDMgM20wLTNMMCAzJy8+PGNpcmNsZSByPScuNScvPjxjaXJjbGUgY3g9JzMnIHI9Jy41Jy8+PGNpcmNsZSBjeT0nMycgcj0nLjUnLz48Y2lyY2xlIGN4PSczJyBjeT0nMycgcj0nLjUnLz48L3N2Zz4=);
+    background-repeat: no-repeat;
+    background-position: right calc(0.375em + 0.325rem) center;
+    background-size: calc(0.75em + 0.65rem) calc(0.75em + 0.65rem);
+}

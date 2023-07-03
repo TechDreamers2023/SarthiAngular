@@ -4,6 +4,9 @@ import { RouterModule, Routes } from '@angular/router';
 import { VendorComponent } from './vendor.component';
 import { SharedModule } from '../theme/shared/shared.module';
 import { NgApexchartsModule } from 'ng-apexcharts';
+import { ProfileComponent } from '../profile/profile.component';
+import { BrowserModule } from '@angular/platform-browser';
+import { ReactiveFormsModule } from '@angular/forms';
 
 const routes: Routes = [
   {
@@ -18,6 +21,8 @@ const routes: Routes = [
     CommonModule,
     SharedModule,
     NgApexchartsModule,
+    BrowserModule,
+    ReactiveFormsModule,
     RouterModule.forChild(routes)
   ]
 })

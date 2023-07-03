@@ -45,8 +45,10 @@ const NavigationItems = [
         title: 'Profile',
         type: 'item',
         classes: 'nav-item',
-        url: '/typography',
-        icon: 'ti ti-typography'
+        url: '/profile',
+        icon: 'ti ti-typography',
+        target: false,
+        external: false
       },
       {
         id: 'RequestHistory',

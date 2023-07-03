@@ -20,6 +20,8 @@ import { ConfigurationComponent } from './theme/layout/admin/configuration/confi
 import { GuestComponent } from './theme/layout/guest/guest.component';
 import {  HttpClientModule } from '@angular/common/http';
 import { ToastrModule } from 'ngx-toastr';
+import { ProfileComponent } from './profile/profile.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -36,6 +38,7 @@ import { ToastrModule } from 'ngx-toastr';
     NavCollapseComponent,
     ConfigurationComponent,
     GuestComponent,
+    ProfileComponent,
   ],
   imports: [
     BrowserModule, 
@@ -43,6 +46,8 @@ import { ToastrModule } from 'ngx-toastr';
     SharedModule, 
     BrowserAnimationsModule,
     HttpClientModule,
+    FormsModule,
+    ReactiveFormsModule,
     ToastrModule.forRoot(),
   ],
   providers: [NavigationItem],

@@ -6,6 +6,7 @@ import { CustomerComponent } from './customer/customer.component';
 import LoginComponent from './demo/pages/authentication/login/login.component';
 import { VendorComponent } from './vendor/vendor.component';
 import { LogoutComponent } from './demo/pages/authentication/logout/logout.component';
+import { ProfileComponent } from './profile/profile.component';
 
 
 const routes: Routes = [
@@ -38,6 +39,15 @@ const routes: Routes = [
       {
         path: 'vendor',
         component: VendorComponent
+      },
+      {
+        path: 'profile',
+        redirectTo: '/profile',
+        pathMatch: 'full'
+      },
+      {
+        path: 'profile',
+        component: ProfileComponent
       },
 
     ],
