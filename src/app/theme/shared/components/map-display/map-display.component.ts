@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { PlaceSearchResult, RequestViewModel } from '../../../../customer/model/place-search-result';
-import { GoogleMap, MapDirectionsService } from '@angular/google-maps';
+import { GoogleMap, MapDirectionsService, MapInfoWindow, MapMarker } from '@angular/google-maps';
 import { map } from 'rxjs';
 import { CustomerService } from 'src/app/services/customer/customer.service';
 import { ToastrService } from 'ngx-toastr';
@@ -16,6 +16,7 @@ export class MapDisplayComponent implements OnInit {
   @ViewChild('myGoogleMap', { static: false })
   map!: GoogleMap;
 
+  @Input() stageId: number = 0;
   @Input() from: PlaceSearchResult | undefined;
   @Input() to: PlaceSearchResult | undefined;
   @Output() triggerRequestChanged = new EventEmitter<boolean>();
@@ -26,7 +27,7 @@ export class MapDisplayComponent implements OnInit {
     lng: 0
   };
 
-  markers: any = {};
+  markers: any = [];
   position = [];
   polylineOptions: any = {};
   currentLat: number;
@@ -39,7 +40,8 @@ export class MapDisplayComponent implements OnInit {
     disableDoubleClickZoom: true,
     minZoom: 5,
   };
-
+  info!: MapInfoWindow;
+  infoContent = ''
   requestViewModel: RequestViewModel = new RequestViewModel();
 
   constructor(
@@ -53,22 +55,23 @@ export class MapDisplayComponent implements OnInit {
     const toLocation = this.to?.location;
 
     if (fromLocation) {
-      this.gotoLocation(fromLocation);
+      this.gotoLocation(fromLocation,"Pick Up","P");
     }
 
     if (toLocation) {
-      this.gotoLocation(toLocation);
+      this.gotoLocation(toLocation,"Drop Off","D");
     }
 
     if (fromLocation && toLocation) {
       this.setRoutePolyline();
+      if(this.stageId == 0)  {
       this.requestViewModel.currentlat = parseFloat(this.center.lat.toString());
       this.requestViewModel.currentlong = parseFloat(this.center.lng.toString());
       this.requestViewModel.pickuplat = parseFloat(fromLocation.lat().toString());
       this.requestViewModel.pickuplong = parseFloat(fromLocation.lng().toString());
       this.requestViewModel.dropOfflat = parseFloat(toLocation.lat().toString());
       this.requestViewModel.dropOfflong = parseFloat(toLocation.lng().toString());
-      this.requestViewModel.userId = 1;
+      this.requestViewModel.userId = this.CustomerId;
 
       console.log(this.requestViewModel);
 
@@ -87,23 +90,33 @@ export class MapDisplayComponent implements OnInit {
         },
         () => { //complete() callback
         })
+      }
     }
   }
 
-  gotoLocation(location: google.maps.LatLng) {
+  gotoLocation(location: google.maps.LatLng,title:string,label:string) {
     var loc = { lat: location.lat(), lng: location.lng() }
     this.position.push(loc)
     this.map.panTo(location);
-    this.markers = {
-      position: this.position,
-      zoom: 5,
+    this.markers.push({
+      position: loc,
+      label: {
+        color: 'black',
+        fontFamily: "'Domine', serif",
+        fontWeight:"bold",
+        text: label,
+      },
+      title: title,
+      info: title,
       zoomControl: true,
       scrollwheel: true,
-    }
+    })  
   }
 
   async ngOnInit() {
+    this.CustomerId  = +localStorage.getItem("UserID");
     await this.getCurrentLocation();
+
   }
 
   getCurrentLocation() {
@@ -125,7 +138,7 @@ export class MapDisplayComponent implements OnInit {
 
               let location = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
 
-              this.gotoLocation(location)
+              this.gotoLocation(location,"Current Location","C")
               resolve(this.center);
             }
           },
@@ -144,5 +157,9 @@ export class MapDisplayComponent implements OnInit {
       strokeOpacity: 1.0,
       strokeWeight: 2,
     };
+  }
+  openInfo(marker: MapMarker, content: string) {
+    this.infoContent = content;
+    this.info.open(marker)
   }
 } 

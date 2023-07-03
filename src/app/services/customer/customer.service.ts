@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { RequestViewModel } from 'src/app/customer/model/place-search-result';
+import { RequestPostViewModel, RequestViewModel } from 'src/app/customer/model/place-search-result';
 
 const headers = new HttpHeaders()
   .set('content-type', 'application/json')
@@ -28,5 +28,10 @@ export class CustomerService {
 
   public GetAllQuotationRequest(customerId: number): Observable<any> {
     return this.http.get<any>(environment.devurl + "/api/Request/GetAllQuotationRequest?customerId=" + customerId);
+  }
+
+  public AcceptQuotationByCustomer(requestPostViewModel : RequestPostViewModel): Observable<any> {
+    console.log(requestPostViewModel);
+    return this.http.post<any>(environment.devurl + "/api/Request/AcceptQuotationByCustomer",requestPostViewModel, { 'headers': headers });
   }
 }
