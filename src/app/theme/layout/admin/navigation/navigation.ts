@@ -36,7 +36,7 @@ const NavigationItems = [
         title: 'Dashboard',
         type: 'item',
         classes: 'nav-item',
-        url: '/customer',
+        url: localStorage.getItem('UserTypeID') != undefined && parseInt(localStorage.getItem('UserTypeID')) == 2 ? '/customer' : '/vendor',
         icon: 'ti ti-dashboard',
         breadcrumbs: false
       },
@@ -70,7 +70,7 @@ const NavigationItems = [
       }
     ]
   }
-  
+
   //,
   // {
   //   id: 'page',
