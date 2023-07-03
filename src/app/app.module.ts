@@ -20,6 +20,8 @@ import { ConfigurationComponent } from './theme/layout/admin/configuration/confi
 import { GuestComponent } from './theme/layout/guest/guest.component';
 import {  HttpClientModule } from '@angular/common/http';
 import { ToastrModule } from 'ngx-toastr';
+import { CustomerService } from './services/customer/customer.service';
+
 
 @NgModule({
   declarations: [
@@ -45,7 +47,7 @@ import { ToastrModule } from 'ngx-toastr';
     HttpClientModule,
     ToastrModule.forRoot(),
   ],
-  providers: [NavigationItem],
+  providers: [NavigationItem,CustomerService],
    
   bootstrap: [AppComponent]
 })

@@ -22,11 +22,13 @@ export class CustomerService {
     return this.http.get<any>(environment.devurl + "/api/Request/GetCurrentStatusByCustomer?customerId=" + customerId);
   }
   public GenerateServiceRequest(requestViewModel: RequestViewModel): Observable<any> {
-
     return this.http.post<any>(environment.devurl + "/api/Request/GenerateServiceRequest", requestViewModel, { 'headers': headers });
   }
 
   public GetAllQuotationRequest(customerId: number): Observable<any> {
     return this.http.get<any>(environment.devurl + "/api/Request/GetAllQuotationRequest?customerId=" + customerId);
+  }
+  public AcceptQuotationByCustomer(customerId: number,quoationsDetailId): Observable<any> {
+    return this.http.get<any>(environment.devurl + "/api/Request/AcceptQuotationByCustomer?customerId=" + customerId+"&quoationsDetailId="+quoationsDetailId);
   }
 }

@@ -1,6 +1,6 @@
 // Angular Import
 import { Component, NgZone, OnInit, ViewChild } from '@angular/core';
-import { PlaceSearchResult } from './model/place-search-result';
+import { PlaceSearchResult, RequestVendorDetailsModel, RequestVendorModel } from './model/place-search-result';
 import { Location, LocationStrategy } from '@angular/common';
 
 // project import
@@ -61,11 +61,13 @@ export class CustomerComponent {
   monthChart: any;
   yearChart: any;
   colorChart = ['#673ab7'];
-  fromvalue: PlaceSearchResult | undefined;
-  tovalue: PlaceSearchResult | undefined;
+  fromvalue: PlaceSearchResult = new PlaceSearchResult;
+  tovalue: PlaceSearchResult = new PlaceSearchResult;
   windowWidth: number;
   customerId: number;
   customerTypeId: number;
+  vendorModel: RequestVendorModel;
+
   // Constructor
   constructor(private zone: NgZone,
     private location: Location,
@@ -224,37 +226,124 @@ export class CustomerComponent {
 
   loadAllQuoations() {
     this.customerService.GetAllQuotationRequest(this.customerId)
-    .subscribe(
-      (response) => {
-        console.log(response);
+      .subscribe(
+        (response) => {
+          response = {
+            "status": 1,
+            "count": 1,
+            "message": "Request Found Successfully",
+            "data": {
+              "durationInMins": "7 mins",
+              "distanceKM": 2.9,
+              "currentLocation": {
+                "address": "Malabar County Rd, Ahmedabad, Gujarat 382481, India",
+                "city": null,
+                "latitude": 23.120548,
+                "longitude": 72.54727
+              },
+              "pickupLocation": {
+                "address": "A308 Amimangal 5, NearSanidhya Royal, Opp Talant Plus Acedmy, New, Chandkheda, Ahmedabad, Gujarat 382424, India",
+                "city": null,
+                "latitude": 23.109098,
+                "longitude": 72.584918
+              },
+              "dropOffLocation": {
+                "address": "Ramdevpir Temple Marg, Ram Nagar, Sabarmati, Ahmedabad, Gujarat 380005, India",
+                "city": null,
+                "latitude": 23.090342,
+                "longitude": 72.585556
+              },
+              "vendorDetails": [
+                {
+                  "vendorId": 7,
+                  "firstName": "Caesar",
+                  "lastName": "Anoushka",
+                  "contactNo": "9874568563",
+                  "totalAmount": 111.5,
+                  "latitude": 23.1204,
+                  "longitude": 72.5392,
+                  "durationInMins": "18 mins",
+                  "distanceKM": 8.8,
+                  "isCustomerAccepted": true,
+                  "isRejectedByVendor": null,
+                  "vehicleNumber": null
+                },
+                {
+                  "vendorId": 7,
+                  "firstName": "Caesar",
+                  "lastName": "Anoushka",
+                  "contactNo": "9874568563",
+                  "totalAmount": 111.5,
+                  "latitude": 23.1204,
+                  "longitude": 72.5392,
+                  "durationInMins": "18 mins",
+                  "distanceKM": 8.8,
+                  "isCustomerAccepted": true,
+                  "isRejectedByVendor": null,
+                  "vehicleNumber": null
+                },
+                {
+                  "vendorId": 7,
+                  "firstName": "Caesar",
+                  "lastName": "Anoushka",
+                  "contactNo": "9874568563",
+                  "totalAmount": 111.5,
+                  "latitude": 23.1204,
+                  "longitude": 72.5392,
+                  "durationInMins": "18 mins",
+                  "distanceKM": 8.8,
+                  "isCustomerAccepted": true,
+                  "isRejectedByVendor": null,
+                  "vehicleNumber": null
+                }
+              ],
+              "userId": 1,
+              "requestId": 1,
+              "requestNumber": "RS230630120143",
+              "currentStageId": 2,
+              "expireDateTime": "2023-06-30T16:32:30.603"
+            }
+          };
 
-        // if (this.responces.status == 1) {
-        //   if (this.responces.data.currentStageId < 8) {
-        //     if (this.responces.data.currentStageId == 2) {
-        //       //Show Quoations
-        //       console.log('Show Quoations');
-        //       this.loadAllQuoations();
-        //     }
-        //     this.showLocationFilter = false;
-        //   }
-        //   else {
-        //     this.showLocationFilter = true;
-        //   }
-        // }
-        // if (this.responces.status == 0) {
-        //   this.toastr.error(response.message)
-        // }
-        // if (this.responces.status == 2) {
-        //   this.showLocationFilter = true;
-        // }
-      },
-      (error) => {
-        this.toastr.error("Something went wrong, Please try Again ")                    //error() callback
-        console.log("Something went wrong")
-      },
-      () => {                                   //complete() callback
+          console.log(response.data);
+          debugger;
+          if (response.status != 0) {
+            this.vendorModel = response.data;
+            this.fromvalue.location = new google.maps.LatLng(this.vendorModel.pickupLocation.latitude, this.vendorModel.pickupLocation.longitude);
+            this.fromvalue.address = this.vendorModel.pickupLocation.address;
+            this.tovalue.location = new google.maps.LatLng(this.vendorModel.dropOffLocation.latitude, this.vendorModel.dropOffLocation.longitude);
+            this.tovalue.address = this.vendorModel.dropOffLocation.address;
+            console.log(this.vendorModel);
+          }
 
-      })
+
+          // if (this.responces.status == 1) {
+          //   if (this.responces.data.currentStageId < 8) {
+          //     if (this.responces.data.currentStageId == 2) {
+          //       //Show Quoations
+          //       console.log('Show Quoations');
+          //       this.loadAllQuoations();
+          //     }
+          //     this.showLocationFilter = false;
+          //   }
+          //   else {
+          //     this.showLocationFilter = true;
+          //   }
+          // }
+          // if (this.responces.status == 0) {
+          //   this.toastr.error(response.message)
+          // }
+          // if (this.responces.status == 2) {
+          //   this.showLocationFilter = true;
+          // }
+        },
+        (error) => {
+          this.toastr.error("Something went wrong, Please try Again ")                    //error() callback
+          console.log("Something went wrong")
+        },
+        () => {                                   //complete() callback
+
+        })
   }
 
   // public Method
@@ -425,5 +514,16 @@ export class CustomerComponent {
     } else {
       this.navCollapsedMob = !this.navCollapsedMob;
     }
+  }
+  
+  Accept(venderId: number) {
+    this.customerService.AcceptQuotationByCustomer(this.customerId, venderId).subscribe(response => {
+      if (response.status == 0 || response.status == 2) {
+        this.toastr.error(response.message);
+      }
+      else {
+        this.toastr.success(response.message);
+      }
+    });
   }
 }
