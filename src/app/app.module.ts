@@ -22,6 +22,7 @@ import {  HttpClientModule } from '@angular/common/http';
 import { ToastrModule } from 'ngx-toastr';
 import { ProfileComponent } from './profile/profile.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [
@@ -48,6 +49,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
+    RouterModule,
+
     ToastrModule.forRoot(),
   ],
   providers: [NavigationItem],
