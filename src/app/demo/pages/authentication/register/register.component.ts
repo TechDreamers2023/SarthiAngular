@@ -56,7 +56,7 @@ export default class RegisterComponent {
 
     responces: any;
 
-    registerClient() {debugger
+    registerClient() {
       this.register.registerClients(this.registerClientObj)
         .subscribe(
           (response) => {                           //next() callback

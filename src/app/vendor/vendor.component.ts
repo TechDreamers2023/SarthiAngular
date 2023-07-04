@@ -185,7 +185,7 @@ export class VendorComponent {
     }
   }
 
-  manageShift() {debugger
+  manageShift() {
     this.vendorService.manageShift().subscribe({
       next: res => {
         if (res.status == 1) {
