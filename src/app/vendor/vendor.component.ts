@@ -30,18 +30,6 @@ import { ToastrService } from 'ngx-toastr';
 import { timer } from 'rxjs';
 import { Router } from '@angular/router';
 
-export type ChartOptions = {
-  series: ApexAxisChartSeries;
-  chart: ApexChart;
-  dataLabels: ApexDataLabels;
-  plotOptions: ApexPlotOptions;
-  responsive: ApexResponsive[];
-  xaxis: ApexXAxis;
-  colors: string[];
-  grid: ApexGrid;
-  tooltip: ApexTooltip;
-  stroke: ApexStroke;
-};
 @Component({
   selector: 'app-vendor',
   templateUrl: './vendor.component.html',
@@ -57,6 +45,10 @@ export class VendorComponent {
   timerSubscription!: any;
   vendorStatusSubscription!: any;
 
+  navCollapsed: boolean;
+  navCollapsedMob: boolean;
+  windowWidth: number;
+  
   requestData: any = {
     currentStageId: 0,
     customerContactNo: "",
@@ -90,7 +82,17 @@ export class VendorComponent {
     private locationStrategy: LocationStrategy,
     private vendorService: VendorService,
     private toastr: ToastrService,
-    private router: Router) { }
+    private router: Router) {
+    let current_url = this.location.path();
+    if (this.location['_baseHref']) {
+      current_url = this.location['_baseHref'] + this.location.path();
+    }
+
+    if (current_url === this.location['_baseHref'] + '/layout/theme-compact' || current_url === this.location['_baseHref'] + '/layout/box')
+      this.windowWidth = window.innerWidth;
+    this.navCollapsed = this.windowWidth >= 1025 ? BerryConfig.isCollapse_menu : false;
+    this.navCollapsedMob = false;
+  }
 
   // Life cycle events
   ngOnInit(): void {
@@ -145,6 +147,7 @@ export class VendorComponent {
         if (res.status == 1) {
           if (res.data) {
             this.requestData = res.data;
+            console.log("Request Data",res.data);
           }
         }
         else {
@@ -188,6 +191,7 @@ export class VendorComponent {
         if (res.status == 1) {
           this.getShiftStatus();
           this.toastr.success(res.message, 'Success!');
+
         }
         else {
           this.toastr.error(res.message, 'Error!');
@@ -234,7 +238,7 @@ export class VendorComponent {
   }
 
   changeStatus(_stage: number) {
-    this.vendorService.UpdateRequestStatus({ requestId: this.requestData.requestId, userId: parseInt(localStorage.getItem('UserID')), stageId: _stage}).subscribe({
+    this.vendorService.UpdateRequestStatus({ requestId: this.requestData.requestId, userId: parseInt(localStorage.getItem('UserID')), stageId: _stage }).subscribe({
       next: res => {
         if (res.status == 1) {
           this.getGetVendorActiveRequest();

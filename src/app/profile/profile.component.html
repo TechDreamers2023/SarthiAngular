@@ -1,0 +1,93 @@
+<div class="row">
+  <div class="col-sm-8">
+    <form [formGroup]="myForm" (ngSubmit)="onSubmit()">
+      <div class="card dashnum-card dashnum-card-small overflow-hidden">
+        <span class="round bg-warning small"></span>
+        <span class="round bg-warning big"></span>
+        <div class="card-body">
+          <div class="d-flex align-items-center">
+            <div class="col-sm-6 col-lg-12 col-md-12">
+              <div class="row mb-3">
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <label class="form-label">First Name <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" formControlName="firstName" placeholder="First Name"
+                      [class.is-invalid]="myForm.get('firstName')?.errors && myForm.get('firstName')?.touched" />
+                    <div *ngIf="myForm.get('firstName')?.errors?.['required'] && myForm.get('firstName')?.touched"
+                      class="invalid-feedback">
+                      Please enter your first name.
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-lg-6 col-md-6">
+                  <div class="form-group">
+                    <label class="form-label">Last Name <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" formControlName="lastName" placeholder="Last Name"
+                      [class.is-invalid]="myForm.get('lastName')?.errors && myForm.get('lastName')?.touched" />
+                    <div *ngIf="myForm.get('lastName')?.errors?.['required'] && myForm.get('lastName')?.touched"
+                      class="invalid-feedback">
+                      Please enter your last name.
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-sm-6 col-lg-6 col-md-6">
+                  <div class="form-group">
+                    <label class="form-label">Email <span class="text-danger">*</span></label>
+                    <input type="text" formControlName="email" class="form-control" placeholder="Email"
+                      [class.is-invalid]="myForm.get('email')?.errors && myForm.get('email')?.touched" />
+                    <div *ngIf="myForm.get('email')?.errors?.['required'] && myForm.get('email')?.touched"
+                      class="invalid-feedback">
+                      Please enter your email address.
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-lg-6 col-md-6">
+                  <div class="form-group">
+                    <label class="form-label">Password <span class="text-danger">*</span></label>
+                    <input type="password" formControlName="password" class="form-control" placeholder="Password"
+                      [class.is-invalid]="myForm.get('password')?.errors && myForm.get('password')?.touched">
+                    <div *ngIf="myForm.get('password')?.errors?.['required'] && myForm.get('password')?.touched"
+                      class="invalid-feedback">
+                      Please enter your password.
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-sm-6 col-lg-6 col-md-6">
+                  <div class="form-group">
+                    <label class="form-label">Contact Number <span class="text-danger">*</span></label>
+                    <input type="text" formControlName="contactNo" class="form-control" placeholder="Contact Number"
+                      [class.is-invalid]="myForm.get('contactNo')?.errors && myForm.get('contactNo')?.touched">
+                    <div *ngIf="myForm.get('contactNo')?.errors?.['required'] && myForm.get('contactNo')?.touched"
+                      class="invalid-feedback">
+                      Please enter your contact number.
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-lg-6 col-md-6">
+                  <div class="form-group">
+                    <label class="form-label">Vehicle Number <span class="text-danger">*</span></label>
+                    <input type="text" formControlName="vehicleNumber" class="form-control" placeholder="Vehicle Number"
+                      [class.is-invalid]="myForm.get('vehicleNumber')?.errors && myForm.get('vehicleNumber')?.touched">
+                    <div
+                      *ngIf="myForm.get('vehicleNumber')?.errors?.['required'] && myForm.get('vehicleNumber')?.touched"
+                      class="invalid-feedback">
+                      Please enter your vehicle number.
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer text-center">
+          <button class="btn btn-success" type="submit">Update Profile</button>
+          <button class="btn btn-outline-dark ms-2" type="button" (click)="onReset()">Clear</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

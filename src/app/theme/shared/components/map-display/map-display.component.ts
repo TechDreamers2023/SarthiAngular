@@ -1,10 +1,9 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { PlaceSearchResult } from '../../../../customer/model/place-search-result';
-
-import { ToastrService } from 'ngx-toastr';
+import { PlaceSearchResult, RequestViewModel } from '../../../../customer/model/place-search-result';
+import { GoogleMap, MapDirectionsService, MapInfoWindow, MapMarker } from '@angular/google-maps';
+import { map } from 'rxjs';
 import { CustomerService } from 'src/app/services/customer/customer.service';
-import { RequestViewModel } from './models/requestViewModel';
-import { MapInfoWindow, MapMarker } from '@angular/google-maps';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-map-display',
@@ -17,6 +16,7 @@ export class MapDisplayComponent implements OnInit {
   @ViewChild('myGoogleMap', { static: false })
   map!: google.maps.Map;
 
+  @Input() stageId: number = 0;
   @Input() from: PlaceSearchResult | undefined;
   @Input() to: PlaceSearchResult | undefined;
   @Output() triggerRequestChanged = new EventEmitter<boolean>();
@@ -26,6 +26,7 @@ export class MapDisplayComponent implements OnInit {
     lat: 0,
     lng: 0
   };
+
   markers: any = [];
   position = [];
   polylineOptions: any = {};
@@ -39,34 +40,37 @@ export class MapDisplayComponent implements OnInit {
     disableDoubleClickZoom: true,
     minZoom: 5,
   };
-  @ViewChild(MapInfoWindow, { static: false })
   info!: MapInfoWindow;
   infoContent = ''
   requestViewModel: RequestViewModel = new RequestViewModel();
 
   constructor(private customerService: CustomerService, private toastr: ToastrService,) { }
 
-  async ngOnInit() {
-    await this.getCurrentLocation();
-  }
-
   ngOnChanges() {
     const fromLocation = this.from?.location;
     const toLocation = this.to?.location;
+
+    if (fromLocation) {
+      this.gotoLocation(fromLocation,"Pick Up","P");
+    }
+
+    if (toLocation) {
+      this.gotoLocation(toLocation,"Drop Off","D");
+    }
 
     if (fromLocation && toLocation) {
       // this.position=[];
       this.gotoLocation(fromLocation,"Pick Up","P");
       this.gotoLocation(toLocation,"Drop Off","D");
       this.setRoutePolyline();
-
+      if(this.stageId == 0)  {
       this.requestViewModel.currentlat = parseFloat(this.center.lat.toString());
       this.requestViewModel.currentlong = parseFloat(this.center.lng.toString());
       this.requestViewModel.pickuplat = parseFloat(fromLocation.lat().toString());
       this.requestViewModel.pickuplong = parseFloat(fromLocation.lng().toString());
       this.requestViewModel.dropOfflat = parseFloat(toLocation.lat().toString());
       this.requestViewModel.dropOfflong = parseFloat(toLocation.lng().toString());
-      this.requestViewModel.userId = 1;
+      this.requestViewModel.userId = this.CustomerId;
 
       console.log(this.requestViewModel);
 
@@ -88,13 +92,14 @@ export class MapDisplayComponent implements OnInit {
         },
         () => { //complete() callback
         })
+      }
     }
   }
 
   gotoLocation(location: google.maps.LatLng,title:string,label:string) {
     var loc = { lat: location.lat(), lng: location.lng() }
     this.position.push(loc)
-    
+    this.map.panTo(location);
     this.markers.push({
       position: loc,
       label: {
@@ -105,10 +110,15 @@ export class MapDisplayComponent implements OnInit {
       },
       title: title,
       info: title,
-    }) 
+      zoomControl: true,
+      scrollwheel: true,
+    })  
   }
 
-  markerDragEnd($event: any) {
+  async ngOnInit() {
+    this.CustomerId  = +localStorage.getItem("UserID");
+    await this.getCurrentLocation();
+
   }
 
   getCurrentLocation() {
@@ -152,4 +162,4 @@ export class MapDisplayComponent implements OnInit {
     this.infoContent = content;
     this.info.open(marker)
   }
-}
+} 

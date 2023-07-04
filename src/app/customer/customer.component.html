@@ -25,7 +25,7 @@
             <div class="col">
               <div class="input-area">
                 <h2>To Drop </h2>
-                <app-place-auto-complete (placeChanged)="tovalue = $event" >
+                <app-place-auto-complete (placeChanged)="tovalue = $event">
                 </app-place-auto-complete>
               </div>
             </div>
@@ -51,7 +51,7 @@
                 <ng-template ngbNavContent>
                   <div class="row">
                     <div class="col-6">
-                      <span class="text-white d-block f-34 f-w-500 my-2">{{vendorModel.distanceKM}} Km<i
+                      <span  *ngIf="stageId > 1" class="text-white d-block f-34 f-w-500 my-2">{{vendorModel.distanceKM}} KM<i
                           class="ti ti-arrow-up-right-circle opacity-50"></i></span>
                       <p class="mb-0">Distance</p>
                     </div>
@@ -85,7 +85,7 @@
                 <ng-template ngbNavContent>
                   <div class="row">
                     <div class="col-6">
-                      <span class="text-white d-block f-34 f-w-500 my-2">{{vendorModel.durationInMins}}<i
+                      <span *ngIf="stageId > 1" class="text-white d-block f-34 f-w-500 my-2">{{vendorModel.durationInMins}}<i
                           class="ti ti-arrow-up-right-circle opacity-50"></i></span>
                       <p class="mb-0">Durations</p>
                     </div>
@@ -113,9 +113,9 @@
             <i class="text-warning ti ti-credit-card"></i>
           </div>
           <div class="ms-2">
-            <p class="mb-0 opacity-50 text-sm">Pick Up</p>
-            <h4 class="mb-1">{{vendorModel.pickupLocation.address}}</h4>
-            
+            <h4 class="mb-1">Pick Up <i class="ti ti-arrow-up-right-circle opacity-50"></i></h4>
+            <p *ngIf="stageId == 0 " class="mb-0 opacity-50 text-sm">No Information Available</p>
+            <p *ngIf="stageId > 1" class="mb-0 opacity-50 text-sm">{{vendorModel.pickupLocation.address}}</p>
           </div>
         </div>
       </div>
@@ -129,8 +129,9 @@
             <i class="text-warning ti ti-chevron-up"></i>
           </div>
           <div class="ms-2">
-            <p class="mb-0 opacity-50 text-sm">Drop Off</p>
-            <h4 class="mb-1">{{vendorModel.dropOffLocation.address}}</h4>
+            <h4 class="mb-1">Drop Off <i class="ti ti-arrow-up-right-circle opacity-50"></i></h4>
+            <p *ngIf="stageId == 0 " class="mb-0 opacity-50 text-sm">No Information Available</p>
+            <p *ngIf="stageId > 1 " class="mb-0 opacity-50 text-sm">{{vendorModel.dropOffLocation.address}}</p>
           </div>
         </div>
       </div>
@@ -140,21 +141,20 @@
   <div class="col-xl-8 col-md-12">
     <div class="card">
       <div class="card-body">
-        <app-map-display (triggerRequestChanged)=ontriggerRequestChanged($event) [from]="fromvalue" [to]="tovalue"></app-map-display>
+        <app-map-display (triggerRequestChanged)=ontriggerRequestChanged($event) [from]="fromvalue" [to]="tovalue" [stageId]="stageId"></app-map-display>
       </div>
     </div>
   </div>
-  <div class="col-xl-4 col-md-12">
+  <div class="col-xl-4 col-md-12" *ngIf="stageId > 1" >
     <div class="card">
       <div class="card-body">
         <div class="row mb-3 align-items-center">
           <div class="col">
-            <h3>Venders List</h3>
+            <h4>Available Venders</h4>
           </div>
           <div class="col-auto"> </div>
         </div>
-       <hr>
-        <ul class="list-group list-group-flush">
+        <ul class="list-group list-group-flush" >
           <li class="list-group-item px-0" *ngFor="let list of vendorModel.vendorDetails">
             <div class="row align-items-start">
               <div class="col">
@@ -169,15 +169,20 @@
             </div>
             <div class="row align-items-start">
               <div class="col">
+                <button *ngIf="list.isCustomerAccepted == null" type="button" class="btn btn-success float-right" (click)="Accept(this.customerId,list.quoationDetailId)">Accept</button>
+                <button *ngIf="list.isCustomerAccepted == true" type="button" style="cursor: no-drop;" class="btn btn-warning float-right">Pending</button>
+                <button *ngIf="list.isRejectedByVendor == true" type="button" style="cursor: no-drop;" class="btn btn-warning float-right">Pending</button>
+             </div>
+            </div>
+            <div class="row align-items-start">
+              <div class="col">
                 <button type="button" class="btn btn-primary float-right" (click)="Accept(list.vendorId)">Accept</button>
             </div>
             </div>
           </li>
           
         </ul>
-        
       </div>
     </div>
   </div>
-  <!-- [ sample-page ] end -->
-</div>
+ </div>

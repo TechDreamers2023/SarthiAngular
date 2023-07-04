@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { LoginService } from 'src/app/services/acoounts/login.service';
 import { ToastrService } from 'ngx-toastr';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { LoginService } from 'src/app/services/acoounts/login.service';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -29,18 +29,18 @@ export default class LoginComponent {
       }
     }
 
-    this.loginForm = this.fb.group({
-      emailAddress: new FormControl('', [Validators.required]),
-      password: new FormControl('', [Validators.required]),
-    });
+  this.loginForm = this.fb.group({
+    emailAddress: new FormControl('', [Validators.required]),
+    password: new FormControl('', [Validators.required]),
+  });
   }
-  get emailAddress() {
-    return this.loginForm.get('emailAddress');
-  }
+get emailAddress() {
+  return this.loginForm.get('emailAddress');
+}
 
-  get password() {
-    return this.loginForm.get('password');
-  }
+get password() {
+  return this.loginForm.get('password');
+}
 
   responces: any;
 
@@ -57,7 +57,7 @@ export default class LoginComponent {
               localStorage.setItem("UserID", this.responces.data[0].userId);
               localStorage.setItem("UserTypeID", this.responces.data[0].usertypeId);
               localStorage.setItem("User", this.responces.data[0].firstName);
-              localStorage.setItem("UserName", this.responces.data[0].firstName + " " + this.responces.data[0].firstName);
+              localStorage.setItem("UserName", this.responces.data[0].firstName + " " + this.responces.data[0].lastName);
               if(this.responces.data[0].usertypeId === 2)
               {
               this.router.navigate(['/customer']);

@@ -20,6 +20,10 @@ import { ConfigurationComponent } from './theme/layout/admin/configuration/confi
 import { GuestComponent } from './theme/layout/guest/guest.component';
 import {  HttpClientModule } from '@angular/common/http';
 import { ToastrModule } from 'ngx-toastr';
+import { ProfileComponent } from './profile/profile.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
+import { RequestHistoryComponent } from './history/request-history/request-history.component';
 import { CustomerService } from './services/customer/customer.service';
 
 
@@ -38,6 +42,8 @@ import { CustomerService } from './services/customer/customer.service';
     NavCollapseComponent,
     ConfigurationComponent,
     GuestComponent,
+    ProfileComponent,
+    RequestHistoryComponent
   ],
   imports: [
     BrowserModule, 
@@ -45,6 +51,10 @@ import { CustomerService } from './services/customer/customer.service';
     SharedModule, 
     BrowserAnimationsModule,
     HttpClientModule,
+    FormsModule,
+    ReactiveFormsModule,
+    RouterModule,
+
     ToastrModule.forRoot(),
   ],
   providers: [NavigationItem,CustomerService],

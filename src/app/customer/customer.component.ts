@@ -1,48 +1,15 @@
 // Angular Import
 import { Component, NgZone, OnInit, ViewChild } from '@angular/core';
-import { PlaceSearchResult, RequestVendorDetailsModel, RequestVendorModel } from './model/place-search-result';
+import { PlaceSearchResult, RequestPostViewModel, RequestVendorDetailsModel, RequestVendorModel } from './model/place-search-result';
 import { Location, LocationStrategy } from '@angular/common';
-
-// project import
 import { SharedModule } from 'src/app/theme/shared/shared.module';
-
-// Bootstrap Import
 import { NgbNavChangeEvent } from '@ng-bootstrap/ng-bootstrap';
-
-// third party
-import ApexCharts from 'apexcharts';
-import {
-  ApexAxisChartSeries,
-  ApexChart,
-  ChartComponent,
-  ApexDataLabels,
-  ApexPlotOptions,
-  ApexResponsive,
-  ApexXAxis,
-  ApexGrid,
-  ApexStroke,
-  ApexTooltip
-} from 'ng-apexcharts';
 import { BerryConfig } from '../app-config';
 import { CustomerService } from '../services/customer/customer.service';
 import { ToastrService } from 'ngx-toastr';
 import { Observable, Subscription, map, timer } from 'rxjs';
 import { Router } from '@angular/router';
 import { Title } from '@angular/platform-browser';
-
-
-export type ChartOptions = {
-  series: ApexAxisChartSeries;
-  chart: ApexChart;
-  dataLabels: ApexDataLabels;
-  plotOptions: ApexPlotOptions;
-  responsive: ApexResponsive[];
-  xaxis: ApexXAxis;
-  colors: string[];
-  grid: ApexGrid;
-  tooltip: ApexTooltip;
-  stroke: ApexStroke;
-};
 
 @Component({
   selector: 'app-customer',
@@ -53,20 +20,16 @@ export type ChartOptions = {
 export class CustomerComponent {
   navCollapsed: boolean;
   navCollapsedMob: boolean;
-  // private props
-  @ViewChild('growthChart') growthChart: ChartComponent;
-  chartOptions: Partial<ChartOptions>;
-  @ViewChild('bajajchart') bajajchart: ChartComponent;
-  chartOptions1: Partial<ChartOptions>;
-  monthChart: any;
-  yearChart: any;
-  colorChart = ['#673ab7'];
-  fromvalue: PlaceSearchResult = new PlaceSearchResult;
-  tovalue: PlaceSearchResult = new PlaceSearchResult;
+  fromvalue: PlaceSearchResult | undefined;
+  tovalue: PlaceSearchResult | undefined;
   windowWidth: number;
   customerId: number;
   customerTypeId: number;
   vendorModel: RequestVendorModel;
+  statusSubscription!: any;
+  responces: any;
+  showLocationFilter: boolean = true;
+  stageId: number = 0;
 
   // Constructor
   constructor(private zone: NgZone,
@@ -85,110 +48,23 @@ export class CustomerComponent {
       this.windowWidth = window.innerWidth;
     this.navCollapsed = this.windowWidth >= 1025 ? BerryConfig.isCollapse_menu : false;
     this.navCollapsedMob = false;
-    this.chartOptions = {
-      series: [
-        {
-          name: 'Investment',
-          data: [35, 125, 35, 35, 35, 80, 35, 20, 35, 45, 15, 75]
-        },
-        {
-          name: 'Loss',
-          data: [35, 15, 15, 35, 65, 40, 80, 25, 15, 85, 25, 75]
-        },
-        {
-          name: 'Profit',
-          data: [35, 145, 35, 35, 20, 105, 100, 10, 65, 45, 30, 10]
-        },
-        {
-          name: 'Maintenance',
-          data: [0, 0, 75, 0, 0, 115, 0, 0, 0, 0, 150, 0]
-        }
-      ],
-      dataLabels: {
-        enabled: false
-      },
-      chart: {
-        type: 'bar',
-        height: 480,
-        stacked: true,
-        toolbar: {
-          show: true
-        }
-      },
-      colors: ['#90caf9', '#1e88e5', '#673ab7', '#ede7f6'],
-      responsive: [
-        {
-          breakpoint: 480,
-          options: {
-            legend: {
-              position: 'bottom',
-              offsetX: -10,
-              offsetY: 0
-            }
-          }
-        }
-      ],
-      plotOptions: {
-        bar: {
-          horizontal: false,
-          columnWidth: '50%'
-        }
-      },
-      xaxis: {
-        type: 'category',
-        categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-      },
-      grid: {
-        strokeDashArray: 4
-      },
-      tooltip: {
-        theme: 'dark'
-      }
-    };
-    this.chartOptions1 = {
-      chart: {
-        type: 'area',
-        height: 95,
-        stacked: true,
-        sparkline: {
-          enabled: true
-        }
-      },
-      colors: ['#673ab7'],
-      stroke: {
-        curve: 'smooth',
-        width: 1
-      },
-
-      series: [
-        {
-          data: [0, 15, 10, 50, 30, 40, 25]
-        }
-      ]
-    };
   }
 
-  timerSubscription!: any;
-
   ngOnInit() {
-
     if (localStorage.getItem("UserTypeID") != undefined) {
+      clearInterval(this.statusSubscription);
       this.customerTypeId = +localStorage.getItem("UserTypeID");
       this.customerId = +localStorage.getItem("UserID");
       this.getCurrentRequestStatus(this.customerId);
-      this.timerSubscription = timer(0, 20000).subscribe((res) => {
-        if (res) {
-          this.getCurrentRequestStatus(this.customerId);
-        }
-      });
     }
     else {
       this.router.navigate(['/login']);
     }
   }
 
-  responces: any;
-  showLocationFilter: boolean = true;
+  ngOnDestroy(): void {
+    clearInterval(this.statusSubscription);
+  }
 
   getCurrentRequestStatus(customerId: number) {
     this.customerService.GetCurrentStatusByCustomer(customerId)
@@ -201,6 +77,12 @@ export class CustomerComponent {
                 //Show Quoations
                 console.log('Show Quoations');
                 this.loadAllQuoations();
+              }
+              else {
+                this.statusSubscription = setInterval(() => {
+                  const res =
+                    this.getCurrentRequestStatus(this.customerId);
+                }, 20000);
               }
               this.showLocationFilter = false;
             }
@@ -228,277 +110,29 @@ export class CustomerComponent {
     this.customerService.GetAllQuotationRequest(this.customerId)
       .subscribe(
         (response) => {
-          response = {
-            "status": 1,
-            "count": 1,
-            "message": "Request Found Successfully",
-            "data": {
-              "durationInMins": "7 mins",
-              "distanceKM": 2.9,
-              "currentLocation": {
-                "address": "Malabar County Rd, Ahmedabad, Gujarat 382481, India",
-                "city": null,
-                "latitude": 23.120548,
-                "longitude": 72.54727
-              },
-              "pickupLocation": {
-                "address": "A308 Amimangal 5, NearSanidhya Royal, Opp Talant Plus Acedmy, New, Chandkheda, Ahmedabad, Gujarat 382424, India",
-                "city": null,
-                "latitude": 23.109098,
-                "longitude": 72.584918
-              },
-              "dropOffLocation": {
-                "address": "Ramdevpir Temple Marg, Ram Nagar, Sabarmati, Ahmedabad, Gujarat 380005, India",
-                "city": null,
-                "latitude": 23.090342,
-                "longitude": 72.585556
-              },
-              "vendorDetails": [
-                {
-                  "vendorId": 7,
-                  "firstName": "Caesar",
-                  "lastName": "Anoushka",
-                  "contactNo": "9874568563",
-                  "totalAmount": 111.5,
-                  "latitude": 23.1204,
-                  "longitude": 72.5392,
-                  "durationInMins": "18 mins",
-                  "distanceKM": 8.8,
-                  "isCustomerAccepted": true,
-                  "isRejectedByVendor": null,
-                  "vehicleNumber": null
-                },
-                {
-                  "vendorId": 7,
-                  "firstName": "Caesar",
-                  "lastName": "Anoushka",
-                  "contactNo": "9874568563",
-                  "totalAmount": 111.5,
-                  "latitude": 23.1204,
-                  "longitude": 72.5392,
-                  "durationInMins": "18 mins",
-                  "distanceKM": 8.8,
-                  "isCustomerAccepted": true,
-                  "isRejectedByVendor": null,
-                  "vehicleNumber": null
-                },
-                {
-                  "vendorId": 7,
-                  "firstName": "Caesar",
-                  "lastName": "Anoushka",
-                  "contactNo": "9874568563",
-                  "totalAmount": 111.5,
-                  "latitude": 23.1204,
-                  "longitude": 72.5392,
-                  "durationInMins": "18 mins",
-                  "distanceKM": 8.8,
-                  "isCustomerAccepted": true,
-                  "isRejectedByVendor": null,
-                  "vehicleNumber": null
-                }
-              ],
-              "userId": 1,
-              "requestId": 1,
-              "requestNumber": "RS230630120143",
-              "currentStageId": 2,
-              "expireDateTime": "2023-06-30T16:32:30.603"
-            }
-          };
-
-          console.log(response.data);
-          debugger;
-          if (response.status != 0) {
+          if (response.status == 1) {
             this.vendorModel = response.data;
-            this.fromvalue.location = new google.maps.LatLng(this.vendorModel.pickupLocation.latitude, this.vendorModel.pickupLocation.longitude);
-            this.fromvalue.address = this.vendorModel.pickupLocation.address;
-            this.tovalue.location = new google.maps.LatLng(this.vendorModel.dropOffLocation.latitude, this.vendorModel.dropOffLocation.longitude);
-            this.tovalue.address = this.vendorModel.dropOffLocation.address;
-            console.log(this.vendorModel);
+            this.stageId = 2;
+            console.log(response.data);
           }
-
-
-          // if (this.responces.status == 1) {
-          //   if (this.responces.data.currentStageId < 8) {
-          //     if (this.responces.data.currentStageId == 2) {
-          //       //Show Quoations
-          //       console.log('Show Quoations');
-          //       this.loadAllQuoations();
-          //     }
-          //     this.showLocationFilter = false;
-          //   }
-          //   else {
-          //     this.showLocationFilter = true;
-          //   }
-          // }
-          // if (this.responces.status == 0) {
-          //   this.toastr.error(response.message)
-          // }
-          // if (this.responces.status == 2) {
-          //   this.showLocationFilter = true;
-          // }
         },
         (error) => {
           this.toastr.error("Something went wrong, Please try Again ")                    //error() callback
           console.log("Something went wrong")
         },
-        () => {                                   //complete() callback
+        () => {
 
+          let pickUp: PlaceSearchResult =
+           {location:new google.maps.LatLng(this.vendorModel.pickupLocation.latitude, this.vendorModel.pickupLocation.longitude),
+             address:this.vendorModel.pickupLocation.address};
+             this.fromvalue = pickUp;
+
+             let dropOff: PlaceSearchResult =
+             {location:new google.maps.LatLng(this.vendorModel.dropOffLocation.latitude, this.vendorModel.dropOffLocation.longitude),
+               address:this.vendorModel.dropOffLocation.address};
+               this.tovalue = dropOff;
         })
   }
-
-  // public Method
-  onNavChange(changeEvent: NgbNavChangeEvent) {
-    if (changeEvent.nextId === 1) {
-      setTimeout(() => {
-        this.monthChart = new ApexCharts(document.querySelector('#tab-chart-1'), this.monthOptions);
-        this.monthChart.render();
-      }, 200);
-    }
-
-    if (changeEvent.nextId === 2) {
-      setTimeout(() => {
-        this.yearChart = new ApexCharts(document.querySelector('#tab-chart-2'), this.yearOptions);
-        this.yearChart.render();
-      }, 200);
-    }
-  }
-
-  ListGroup = [
-    {
-      name: 'Bajaj Finery',
-      profit: '10% Profit',
-      invest: '$1839.00',
-      bgColor: 'bg-light-success',
-      icon: 'ti ti-chevron-up',
-      color: 'text-success'
-    },
-    {
-      name: 'TTML',
-      profit: '10% Loss',
-      invest: '$100.00',
-      bgColor: 'bg-light-danger',
-      icon: 'ti ti-chevron-down',
-      color: 'text-danger'
-    },
-    {
-      name: 'Reliance',
-      profit: '10% Profit',
-      invest: '$200.00',
-      bgColor: 'bg-light-success',
-      icon: 'ti ti-chevron-up',
-      color: 'text-success'
-    },
-    {
-      name: 'ATGL',
-      profit: '10% Loss',
-      invest: '$189.00',
-      bgColor: 'bg-light-danger',
-      icon: 'ti ti-chevron-down',
-      color: 'text-danger'
-    },
-    {
-      name: 'Stolon',
-      profit: '10% Profit',
-      invest: '$210.00',
-      bgColor: 'bg-light-success',
-      icon: 'ti ti-chevron-up',
-      color: 'text-success'
-    }
-  ];
-
-  monthOptions = {
-    chart: {
-      type: 'line',
-      height: 90,
-      sparkline: {
-        enabled: true
-      }
-    },
-    dataLabels: {
-      enabled: false
-    },
-    colors: ['#FFF'],
-    stroke: {
-      curve: 'smooth',
-      width: 3
-    },
-    series: [
-      {
-        name: 'series1',
-        data: [45, 66, 41, 89, 25, 44, 9, 54]
-      }
-    ],
-    yaxis: {
-      min: 5,
-      max: 95
-    },
-    tooltip: {
-      theme: 'dark',
-      fixed: {
-        enabled: false
-      },
-      x: {
-        show: false
-      },
-      y: {
-        title: {
-          formatter: function (seriesName) {
-            return 'Total Earning';
-          }
-        }
-      },
-      marker: {
-        show: false
-      }
-    }
-  };
-
-  yearOptions = {
-    chart: {
-      type: 'line',
-      height: 90,
-      sparkline: {
-        enabled: true
-      }
-    },
-    dataLabels: {
-      enabled: false
-    },
-    colors: ['#FFF'],
-    stroke: {
-      curve: 'smooth',
-      width: 3
-    },
-    series: [
-      {
-        name: 'series1',
-        data: [35, 44, 9, 54, 45, 66, 41, 69]
-      }
-    ],
-    yaxis: {
-      min: 5,
-      max: 95
-    },
-    tooltip: {
-      theme: 'dark',
-      fixed: {
-        enabled: false
-      },
-      x: {
-        show: false
-      },
-      y: {
-        title: {
-          formatter: function (seriesName) {
-            return 'Total Earning';
-          }
-        }
-      },
-      marker: {
-        show: false
-      }
-    }
-  };
 
   ontriggerRequestChanged(data) {
     this.getCurrentRequestStatus(this.customerId);
@@ -515,14 +149,20 @@ export class CustomerComponent {
       this.navCollapsedMob = !this.navCollapsedMob;
     }
   }
-  
-  Accept(venderId: number) {
-    this.customerService.AcceptQuotationByCustomer(this.customerId, venderId).subscribe(response => {
+
+  requestAcceptViewModel: RequestPostViewModel = new RequestPostViewModel();
+  Accept(customerId : number , quoationDetailedId: number) {
+    this.requestAcceptViewModel.customerId = customerId;
+    this.requestAcceptViewModel.quoationDetailedId = quoationDetailedId;
+
+    this.customerService.AcceptQuotationByCustomer(this.requestAcceptViewModel).subscribe(response => {
+     console.log(response.status);
       if (response.status == 0 || response.status == 2) {
         this.toastr.error(response.message);
       }
       else {
         this.toastr.success(response.message);
+        this.getCurrentRequestStatus(this.customerId);
       }
     });
   }

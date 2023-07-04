@@ -12,11 +12,11 @@ export class RequestViewModel {
     dropOfflong: number;
     userId: number;
 }
-
+ 
 export class RequestVendorModel {
     currentLocation: AddressModel;
-    currentStageId: number;
-    distanceKM: number;
+    currentStageId: number = 0;
+    distanceKM: number = 0;
     dropOffLocation: AddressModel;
     durationInMins: string;
     expireDateTime: Date;
@@ -45,4 +45,11 @@ export class RequestVendorDetailsModel {
     isCustomerAccepted : boolean;
     isRejectedByVendor : boolean;
     vehicleNumber : string;
+    quoationDetailId : number;
+}
+
+
+export class RequestPostViewModel {
+    customerId: number;
+    quoationDetailedId: number;
 }

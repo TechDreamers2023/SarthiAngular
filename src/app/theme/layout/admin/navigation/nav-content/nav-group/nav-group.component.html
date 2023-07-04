@@ -1,8 +1,4 @@
 <ng-container *ngIf="!item.hidden">
-  <li class="nav-item coded-menu-caption">
-    <label class="NameDecorator">Welcome </label>
-    <label class="NameDecorator">  : {{userName}}</label>
-  </li>
   <ng-container *ngFor="let item of item.children">
     <app-nav-group *ngIf="item.type == 'group'" [item]="item"></app-nav-group>
     <app-nav-collapse *ngIf="item.type == 'collapse'" [item]="item"></app-nav-collapse>

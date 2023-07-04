@@ -6,12 +6,19 @@ import { CustomerComponent } from './customer/customer.component';
 import LoginComponent from './demo/pages/authentication/login/login.component';
 import { VendorComponent } from './vendor/vendor.component';
 import { LogoutComponent } from './demo/pages/authentication/logout/logout.component';
+import { ProfileComponent } from './profile/profile.component';
+import RegisterComponent from './demo/pages/authentication/register/register.component';
+import { RequestHistoryComponent } from './history/request-history/request-history.component';
 
 
 const routes: Routes = [
   {
     path: '',
     component: LoginComponent,
+  },
+  {
+    path: 'register',
+    component: RegisterComponent,
   },
   {
     path: 'logout',
@@ -39,12 +46,33 @@ const routes: Routes = [
         path: 'vendor',
         component: VendorComponent
       },
-
+      {
+        path: 'profile',
+        redirectTo: '/profile',
+        pathMatch: 'full'
+      },
+      {
+        path: 'profile',
+        component: ProfileComponent
+      },
+      {
+        path: 'request-history',
+        redirectTo: '/request-history',
+        pathMatch: 'full'
+      },
+      {
+        path: 'request-history',
+        component: RequestHistoryComponent
+      }
     ],
   },
   {
     path: '',
     loadChildren: () => import('./demo/pages/authentication/login/login.module').then(m => m.LoginModule)
+  },
+  {
+    path: '',
+    loadChildren: () => import('./demo/pages/authentication/register/register.module').then(m => m.RegisterModule)
   },
   {
     path: '',
@@ -54,7 +82,6 @@ const routes: Routes = [
     path: '',
     loadChildren: () => import('./vendor/vendor.module').then(m => m.VendorModule)
   },
-
   {
     path: '',
     component: GuestComponent,

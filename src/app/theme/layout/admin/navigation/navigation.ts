@@ -36,39 +36,41 @@ const NavigationItems = [
         title: 'Dashboard',
         type: 'item',
         classes: 'nav-item',
-        url: '/customer',
+        url: localStorage.getItem('UserTypeID') != undefined && parseInt(localStorage.getItem('UserTypeID')) == 2 ? '/customer' : '/vendor',
         icon: 'ti ti-dashboard',
         breadcrumbs: false
       },
-      {
-        id: 'Profile',
-        title: 'Profile',
-        type: 'item',
-        classes: 'nav-item',
-        url: '/typography',
-        icon: 'ti ti-typography'
-      },
+      // {
+      //   id: 'Profile',
+      //   title: 'Profile',
+      //   type: 'item',
+      //   classes: 'nav-item',
+      //   url: '/profile',
+      //   icon: 'ti ti-user',
+      //   target: false,
+      //   external: false
+      // },
       {
         id: 'RequestHistory',
         title: 'Request History',
         type: 'item',
         classes: 'nav-item',
-        url: '/color',
-        icon: 'ti ti-brush'
+        url: '/request-history',
+        icon: 'ti ti-table'
       },
-      {
-        id: 'Logout',
-        title: 'Logout',
-        type: 'item',
-        classes: 'nav-item',
-        url: '/logout',
-        icon: 'ti ti-plant-2',
-        target: false,
-        external: false
-      }
+      // {
+      //   id: 'Logout',
+      //   title: 'Logout',
+      //   type: 'item',
+      //   classes: 'nav-item',
+      //   url: '/logout',
+      //   icon: 'ti ti-arrow-left-circle',
+      //   target: false,
+      //   external: false
+      // }
     ]
   }
-  
+
   //,
   // {
   //   id: 'page',
