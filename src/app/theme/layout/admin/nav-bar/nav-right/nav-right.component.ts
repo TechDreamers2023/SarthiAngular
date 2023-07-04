@@ -14,7 +14,6 @@ export class NavRightComponent {
   // Life cycle events
   ngOnInit(): void {
     if (localStorage.getItem("UserName") != undefined) {
-      debugger
       this.username = localStorage.getItem("UserName");
     }
   }
