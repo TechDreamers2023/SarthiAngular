@@ -1,1 +1,107 @@
-<p>request-history works!</p>
+<div class="row">
+    <div class="col-sm-6 col-xl-12 col-md-12" *ngIf="requestData && requestData.length > 0">
+        <div class="card" *ngFor="let item of requestData">
+            <div class="card-body" *ngIf="userTypeId == 4">
+                <div class="row align-items-start">
+                    <div class="col-sm-6 com-md-6 col-lg-3 mb-2">
+                        <span><small>Request Number</small></span>
+                        <h4>{{item.requestNumber}}</h4>
+                    </div>
+                    <div class="col-sm-6 com-md-6 col-lg-3 mb-2">
+                        <span><small>Customer</small></span>
+                        <h4>{{item.customerFirstName + ' ' + item.customerLastName}}</h4>
+                    </div>
+                    <div class="col-sm-6 com-md-6 col-lg-3 mb-2">
+                        <span><small>Contact</small></span>
+                        <h4>{{item.customerContactNo}}</h4>
+                    </div>
+                    <div class="col-sm-6 com-md-6 col-lg-3 mb-2">
+                        <span><small>Payment Date</small></span>
+                        <h4>{{item.paymentDateTime | date:'dd-MM-yyyy hh:mm a'}}</h4>
+                    </div>
+                    <div class="col-sm-6 com-md-6 col-lg-3 mb-2">
+                        <span><small>Vehicle Number</small></span>
+                        <h4>{{item.customerVehicleNumber}}</h4>
+                    </div>
+                    <div class="col-sm-6 com-md-6 col-lg-3 mb-2">
+                        <span><small>Distance</small></span>
+                        <h4>{{item.distanceKM}} KM</h4>
+                    </div>
+                    <div class="col-sm-6 com-md-6 col-lg-3 mb-2">
+                        <span><small>Duration</small></span>
+                        <h4>{{item.durationInMins}}</h4>
+                    </div>
+                    <div class="col-sm-6 com-md-6 col-lg-3 mb-2">
+                        <span><small>Total Amount</small></span>
+                        <h4><svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor"
+                                class="bi bi-currency-rupee" viewBox="0 0 16 16">
+                                <path
+                                    d="M4 3.06h2.726c1.22 0 2.12.575 2.325 1.724H4v1.051h5.051C8.855 7.001 8 7.558 6.788 7.558H4v1.317L8.437 14h2.11L6.095 8.884h.855c2.316-.018 3.465-1.476 3.688-3.049H12V4.784h-1.345c-.08-.778-.357-1.335-.793-1.732H12V2H4v1.06Z" />
+                            </svg>
+                            {{item.totalAmount}}
+                        </h4>
+                    </div>
+                    <div class="col-sm-6 com-md-6 col-lg-6 mb-2">
+                        <span><small>PickUp Location</small></span>
+                        <h4>{{item.pickUpLocation}}</h4>
+                    </div>
+                    <div class="col-sm-6 com-md-6 col-lg-6 mb-2">
+                        <span><small>Drop Off Location</small></span>
+                        <h4>{{item.dropOffLocation}}</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body" *ngIf="userTypeId == 2">
+                <div class="row align-items-start">
+                    <div class="col-sm-6 com-md-6 col-lg-3 mb-2">
+                        <span><small>Request Number</small></span>
+                        <h4>{{item.requestNumber}}</h4>
+                    </div>
+                    <div class="col-sm-6 com-md-6 col-lg-3 mb-2">
+                        <span><small>Vendor</small></span>
+                        <h4>{{item.vendorFirstName + ' ' + item.vendorLastName}}</h4>
+                    </div>
+                    <div class="col-sm-6 com-md-6 col-lg-3 mb-2">
+                        <span><small>Contact</small></span>
+                        <h4>{{item.vendorContactNo}}</h4>
+                    </div>
+                    <div class="col-sm-6 com-md-6 col-lg-3 mb-2">
+                        <span><small>Payment Date</small></span>
+                        <h4>{{item.paymentDateTime | date:'dd-MM-yyyy hh:mm a'}}</h4>
+                    </div>
+                    <div class="col-sm-6 com-md-6 col-lg-3 mb-2">
+                        <span><small>Vehicle Number</small></span>
+                        <h4>{{item.vendorVehicleNumber}}</h4>
+                    </div>
+                    <div class="col-sm-6 com-md-6 col-lg-3 mb-2">
+                        <span><small>Distance</small></span>
+                        <h4>{{item.distanceKM}} KM</h4>
+                    </div>
+                    <div class="col-sm-6 com-md-6 col-lg-3 mb-2">
+                        <span><small>Duration</small></span>
+                        <h4>{{item.durationInMins}}</h4>
+                    </div>
+                    <div class="col-sm-6 com-md-6 col-lg-3 mb-2">
+                        <span><small>Total Amount</small></span>
+                        <h4><svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor"
+                                class="bi bi-currency-rupee" viewBox="0 0 16 16">
+                                <path
+                                    d="M4 3.06h2.726c1.22 0 2.12.575 2.325 1.724H4v1.051h5.051C8.855 7.001 8 7.558 6.788 7.558H4v1.317L8.437 14h2.11L6.095 8.884h.855c2.316-.018 3.465-1.476 3.688-3.049H12V4.784h-1.345c-.08-.778-.357-1.335-.793-1.732H12V2H4v1.06Z" />
+                            </svg>
+                            {{item.totalAmount}}
+                        </h4>
+                    </div>
+                    <div class="col-sm-6 com-md-6 col-lg-6 mb-2">
+                        <span><small>PickUp Location</small></span>
+                        <h4>{{item.pickUpLocation}}</h4>
+                    </div>
+                    <div class="col-sm-6 com-md-6 col-lg-6 mb-2">
+                        <span><small>Drop Off Location</small></span>
+                        <h4>{{item.dropOffLocation}}</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
