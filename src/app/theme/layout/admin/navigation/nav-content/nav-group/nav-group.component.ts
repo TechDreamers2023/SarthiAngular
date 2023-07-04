@@ -17,12 +17,10 @@ export class NavGroupComponent implements OnInit {
   @Output() toggle: EventEmitter<any> = new EventEmitter();
 
   // Constructor
-  constructor(private zone: NgZone, private location: Location, private locationStrategy: LocationStrategy) {}
+  constructor(private zone: NgZone, private location: Location, private locationStrategy: LocationStrategy) { }
 
-  // Life cycle events
-  userName:any;
+  // Life cycle events 
   ngOnInit() {
-    this.userName = localStorage.getItem("User");
     // at reload time active and trigger link
     let current_url = this.location.path();
     const baseHref = this.locationStrategy.getBaseHref();
