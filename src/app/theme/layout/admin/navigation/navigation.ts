@@ -46,7 +46,7 @@ const NavigationItems = [
         type: 'item',
         classes: 'nav-item',
         url: '/profile',
-        icon: 'ti ti-typography',
+        icon: 'ti ti-user',
         target: false,
         external: false
       },
@@ -55,8 +55,8 @@ const NavigationItems = [
         title: 'Request History',
         type: 'item',
         classes: 'nav-item',
-        url: '/color',
-        icon: 'ti ti-brush'
+        url: '/request-history',
+        icon: 'ti ti-table'
       },
       {
         id: 'Logout',
@@ -64,7 +64,7 @@ const NavigationItems = [
         type: 'item',
         classes: 'nav-item',
         url: '/logout',
-        icon: 'ti ti-plant-2',
+        icon: 'ti ti-arrow-left-circle',
         target: false,
         external: false
       }
