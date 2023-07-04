@@ -159,6 +159,7 @@ export class VendorComponent {
         if (res.status == 1) {
           if (res.data) {
             this.requestData = res.data;
+            console.log("Request Data",res.data);
           }
         }
         else {
@@ -196,12 +197,13 @@ export class VendorComponent {
     }
   }
 
-  manageShift() {
+  manageShift() {debugger
     this.vendorService.manageShift().subscribe({
       next: res => {
         if (res.status == 1) {
           this.getShiftStatus();
           this.toastr.success(res.message, 'Success!');
+
         }
         else {
           this.toastr.error(res.message, 'Error!');
