@@ -57,7 +57,7 @@ get password() {
               localStorage.setItem("UserID", this.responces.data[0].userId);
               localStorage.setItem("UserTypeID", this.responces.data[0].usertypeId);
               localStorage.setItem("User", this.responces.data[0].firstName);
-              localStorage.setItem("UserName", this.responces.data[0].firstName + " " + this.responces.data[0].firstName);
+              localStorage.setItem("UserName", this.responces.data[0].firstName + " " + this.responces.data[0].lastName);
               if(this.responces.data[0].usertypeId === 2)
               {
               this.router.navigate(['/customer']);
