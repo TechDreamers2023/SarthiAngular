@@ -51,3 +51,15 @@ $pc-secondary: map-get($preset-colors, 'preset-1', 'secondary');
 .text-danger{
     color: red;
 }
+.timer-text{
+    height: 70px;
+    border: 5px solid #e1d8f1;
+    border-radius: 50%;
+    width: 70px;
+    text-align: center;
+    vertical-align: middle;
+    padding-top: 17px;
+    font-size: 18px;
+    font-weight: 700;
+    color: #6741b9;
+}

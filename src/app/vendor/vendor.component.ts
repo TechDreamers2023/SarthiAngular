@@ -49,6 +49,9 @@ export class VendorComponent {
   navCollapsedMob: boolean;
   windowWidth: number;
 
+  timeLeft: number = 3600;
+  subscribeTimer: any;
+
   requestData: any = {
     currentStageId: 0,
     customerContactNo: "",
@@ -105,10 +108,19 @@ export class VendorComponent {
         //Check shift status..
         this.getShiftStatus();
       }
+
+      this.observableTimer();
     }
     else {
       this.router.navigate(['/login']);
     }
+  }
+
+  observableTimer() {
+    const source = timer(1000, 2000);
+    const abc = source.subscribe(val => {
+      this.subscribeTimer = this.timeLeft - val;
+    });
   }
 
   ngOnDestroy(): void {

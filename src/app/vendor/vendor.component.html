@@ -15,11 +15,17 @@
     <div class="card" *ngIf="requestData && IsShiftStarted && requestData.currentStageId > 0">
       <div class="card-body">
         <div class="row mb-3 align-items-center">
-          <div class="col-md-6 col-sm-6 col-lg-6">
-            <h3 class="float-left" style="color: #0b4f8b;">REQUEST NUMBER {{requestData.requestNumber}}</h3><br>
+          <div class="col-md-6 col-sm-6 col-lg-3">
+            <span class="float-left timer-text">{{
+              subscribeTimer * 1000 | date:'mm:ss':'UTC' }}
+            </span>
+          </div>
+          <div class="col-md-6 col-sm-6 col-lg-4">
+            <h4 class="float-left" style="color: #0b4f8b;"><small>REQUEST NUMBER</small> {{requestData.requestNumber}}
+            </h4>
           </div>
 
-          <div class="col-md-6 col-sm-6 col-lg-6">
+          <div class="col-md-6 col-sm-6 col-lg-5">
             <button type="button" *ngIf="requestData.currentStageId == 2" class="btn btn-danger float-right"
               (click)="rejectQuotation()">Reject</button>
             <button type="button" *ngIf="requestData.currentStageId == 2" class="btn btn-success float-right me-2"
