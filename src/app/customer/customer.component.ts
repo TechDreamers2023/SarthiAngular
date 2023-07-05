@@ -238,7 +238,7 @@ export class CustomerComponent {
               requestNumber : response.data.requestNumber,
               message:message
             }
-            console.log(this.pastHistoryModel);
+            
           }
           else{
             this.pastHistoryModel = {
