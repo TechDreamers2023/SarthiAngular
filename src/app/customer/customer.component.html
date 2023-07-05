@@ -177,10 +177,13 @@
                   class="btn btn-warning float-right">Pending</button>
                 <button *ngIf="list.isRejectedByVendor == true" type="button" style="cursor: no-drop;"
                   class="btn btn-warning float-right">Pending</button>
+                &nbsp;
+                <button type="button" class="btn btn-success float-right" (click)="GeneratePdf()">Download
+                  Invoice</button>
               </div>
             </div>
           </li>
-        </ul> 
+        </ul>
       </div>
     </div>
   </div>
@@ -237,11 +240,12 @@
             </div>
             <div class="row align-items-start">
               <div class="col">
-                <button type="button" class="btn btn-primary float-right" (click)="Accept(list.vendorId)">Accept</button>
-            </div>
+                <button type="button" class="btn btn-primary float-right"
+                  (click)="Accept(list.vendorId,1)">Accept</button>
+              </div>
             </div>
           </li>
-          
+
         </ul>
       </div>
     </div>
@@ -403,7 +407,8 @@
         </div>
       </div>
     </div>
-    <div style="margin-top: 2%;" class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 MuiGrid-grid-sm-6 MuiGrid-grid-lg-3 css-4v9257">
+    <div style="margin-top: 2%;"
+      class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 MuiGrid-grid-sm-6 MuiGrid-grid-lg-3 css-4v9257">
       <div class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation0 MuiCard-root css-72ockd">
         <div class="MuiCardContent-root css-18mhetb">
           <p class="MuiTypography-root MuiTypography-body2 css-1x60m27"><svg

@@ -1,6 +1,6 @@
 // Angular Import
 import { Component, NgZone, OnInit, ViewChild } from '@angular/core';
-import {  PastHistoryModel, PlaceSearchResult, RequestPostViewModel, RequestVendorDetailsModel, RequestVendorModel, TrackServiceModel } from './model/place-search-result';
+import { PastHistoryModel, PlaceSearchResult, RequestPostViewModel, RequestVendorDetailsModel, RequestVendorModel, TrackServiceModel } from './model/place-search-result';
 import { Location, LocationStrategy } from '@angular/common';
 import { SharedModule } from 'src/app/theme/shared/shared.module';
 import { NgbNavChangeEvent } from '@ng-bootstrap/ng-bootstrap';
@@ -10,6 +10,10 @@ import { ToastrService } from 'ngx-toastr';
 import { Observable, Subscription, map, timer } from 'rxjs';
 import { Router } from '@angular/router';
 import { Title } from '@angular/platform-browser';
+import * as pdfMake from 'pdfmake/build/pdfmake';
+import * as pdfFonts from "pdfmake/build/vfs_fonts";
+import { InvoiceService } from '../services/common/invoicePdf.service';
+(<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
 
 @Component({
   selector: 'app-customer',
@@ -32,13 +36,13 @@ export class CustomerComponent {
   stageId: number = 0;
   trackServiceModel: TrackServiceModel[];
 
-  pastHistoryModel : PastHistoryModel = {
+  pastHistoryModel: PastHistoryModel = {
 
-    pastStageId : 0,
+    pastStageId: 0,
 
-    message:"",
+    message: "",
 
-    requestNumber:""
+    requestNumber: ""
 
   }
   // Constructor
@@ -47,7 +51,8 @@ export class CustomerComponent {
     private locationStrategy: LocationStrategy,
     private customerService: CustomerService,
     private toastr: ToastrService,
-    private router: Router) {
+    private router: Router,
+    private invoiceService: InvoiceService) {
 
     let current_url = this.location.path();
     if (this.location['_baseHref']) {
@@ -222,36 +227,33 @@ export class CustomerComponent {
         (response) => {
           console.log(response);
           if (response.status == 1) {
-            let message : string;
+            let message: string;
 
-            if (response.data.pastStageId == 8)
-            {
+            if (response.data.pastStageId == 8) {
               message = "Request has been completed successfully";
             }
-           
-            if (response.data.pastStageId == 9)
-            {
+
+            if (response.data.pastStageId == 9) {
               message = "Request has been cancelled by vendor";
             }
 
-            if (response.data.pastStageId == 10)
-            {
+            if (response.data.pastStageId == 10) {
               message = "Request has been cancelled by customer";
             }
 
             this.pastHistoryModel = {
-              pastStageId :response.data.pastStageId,
-              requestNumber : response.data.requestNumber,
-              message:message
+              pastStageId: response.data.pastStageId,
+              requestNumber: response.data.requestNumber,
+              message: message
             }
             console.log(this.pastHistoryModel);
-            
+
           }
-          else{
+          else {
             this.pastHistoryModel = {
-              pastStageId :0,
-              requestNumber : "N/A",
-              message:"N/A"
+              pastStageId: 0,
+              requestNumber: "N/A",
+              message: "N/A"
             }
           }
         },
@@ -296,7 +298,50 @@ export class CustomerComponent {
       }
     });
   }
-  RedirectToHistory(){
+
+  async GeneratePdf() {
+    const data: any =
+    {
+      "durationInMins": "7 mins",
+      "distanceKM": 2.9,
+      "pickupLocation": {
+        "address": "A308 Amimangal 5, NearSanidhya Royal, Opp Talant Plus Acedmy, New, Chandkheda, Ahmedabad, Gujarat 382424, India",
+        "city": null,
+        "latitude": 23.109098,
+        "longitude": 72.584918
+      },
+      "dropOffLocation": {
+        "address": "Ramdevpir Temple Marg, Ram Nagar, Sabarmati, Ahmedabad, Gujarat 380005, India",
+        "city": null,
+        "latitude": 23.090342,
+        "longitude": 72.585556
+      },
+      "vendorDetails":
+      {
+        "vendorId": 7,
+        "firstName": "Caesar",
+        "lastName": "Anoushka",
+        "contactNo": "9874568563",
+        "totalAmount": 111.5,
+        "latitude": 23.1204,
+        "longitude": 72.5392,
+        "durationInMins": "18 mins",
+        "distanceKM": 8.8,
+        "isCustomerAccepted": true,
+        "isRejectedByVendor": null,
+        "vehicleNumber": "GJ01-RT-2234"
+      },
+      "userId": 1,
+      "requestId": 1,
+      "requestNumber": "RS230630120143",
+      "currentStageId": 2,
+      "expireDateTime": "2023-06-30T16:32:30.603"
+    }
+
+    var docDefinition = await this.invoiceService.generatePdf(data);
+    await pdfMake.createPdf(docDefinition).download("test.pdf");
+  }
+  RedirectToHistory() {
     this.router.navigate(['/request-history']);
   }
 }
