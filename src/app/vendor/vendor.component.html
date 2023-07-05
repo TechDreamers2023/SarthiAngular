@@ -15,11 +15,10 @@
     <div class="card" *ngIf="requestData && IsShiftStarted && requestData.currentStageId > 0">
       <div class="card-body">
         <div class="row mb-3 align-items-center">
-          <div class="row">
-            <div class="col-md-6 col-sm-6 col-lg-6">
-            <h3 class="float-left" style="color: #0b4f8b;">REQUEST NUMBER  {{requestData.requestNumber}}</h3><br>
+          <div class="col-md-6 col-sm-6 col-lg-6">
+            <h3 class="float-left" style="color: #0b4f8b;">REQUEST NUMBER {{requestData.requestNumber}}</h3><br>
           </div>
-         
+
           <div class="col-md-6 col-sm-6 col-lg-6">
             <button type="button" *ngIf="requestData.currentStageId == 2" class="btn btn-danger float-right"
               (click)="rejectQuotation()">Reject</button>
@@ -39,26 +38,6 @@
               class="btn btn-default float-right">Quotation
               Rejected</button>
           </div>
-          </div>
-          <!-- <div >
-            <button type="button" *ngIf="requestData.currentStageId == 2" class="btn btn-danger float-right"
-              (click)="rejectQuotation()">Reject</button>
-            <button type="button" *ngIf="requestData.currentStageId == 2" class="btn btn-success float-right me-2"
-              (click)="accceptQuotation()">Accept</button>
-            <button type="button" *ngIf="requestData.currentStageId == 3" class="btn btn-success float-right"
-              (click)="changeStatus(4)">Reached To Pickup</button>
-            <button type="button" *ngIf="requestData.currentStageId == 4" class="btn btn-success float-right"
-              (click)="changeStatus(5)">Pickup Done</button>
-            <button type="button" *ngIf="requestData.currentStageId == 5" class="btn btn-success float-right"
-              (click)="changeStatus(6)">Reached To Drop Off</button>
-            <button type="button" *ngIf="requestData.currentStageId == 6" class="btn btn-success float-right"
-              (click)="changeStatus(7)">Payment Done</button>
-            <button type="button" *ngIf="requestData.currentStageId == 7" class="btn btn-success float-right"
-              (click)="changeStatus(8)">Completed</button>
-            <button type="button" disabled *ngIf="requestData.currentStageId == 9 || requestData.currentStageId == 10"
-              class="btn btn-default float-right">Quotation
-              Rejected</button>
-          </div> -->
         </div>
         <hr />
         <div class="row align-items-start">
@@ -96,9 +75,11 @@
               <h3>Total Amount</h3>
             </div>
             <div class="float-right">
-              <h3><svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor" class="bi bi-currency-rupee" viewBox="0 0 16 16">
-                <path d="M4 3.06h2.726c1.22 0 2.12.575 2.325 1.724H4v1.051h5.051C8.855 7.001 8 7.558 6.788 7.558H4v1.317L8.437 14h2.11L6.095 8.884h.855c2.316-.018 3.465-1.476 3.688-3.049H12V4.784h-1.345c-.08-.778-.357-1.335-.793-1.732H12V2H4v1.06Z"/>
-              </svg> {{requestData.totalAmount}} /-</h3>
+              <h3><svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor"
+                  class="bi bi-currency-rupee" viewBox="0 0 16 16">
+                  <path
+                    d="M4 3.06h2.726c1.22 0 2.12.575 2.325 1.724H4v1.051h5.051C8.855 7.001 8 7.558 6.788 7.558H4v1.317L8.437 14h2.11L6.095 8.884h.855c2.316-.018 3.465-1.476 3.688-3.049H12V4.784h-1.345c-.08-.778-.357-1.335-.793-1.732H12V2H4v1.06Z" />
+                </svg>{{requestData.totalAmount}}</h3>
             </div>
           </div>
         </div>
@@ -108,7 +89,8 @@
   <div class="col-xl-8 col-md-12">
     <div class="card">
       <div class="card-body">
-        <app-map-display [from]="fromvalue" [to]="tovalue"></app-map-display>
+        <app-map-display></app-map-display>
+        <!-- <app-map-display [from]="requestData.pickUpLocation" [to]="requestData.dropOffLocation"></app-map-display> -->
       </div>
     </div>
   </div>

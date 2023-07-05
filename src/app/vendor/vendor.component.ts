@@ -30,18 +30,6 @@ import { ToastrService } from 'ngx-toastr';
 import { timer } from 'rxjs';
 import { Router } from '@angular/router';
 
-export type ChartOptions = {
-  series: ApexAxisChartSeries;
-  chart: ApexChart;
-  dataLabels: ApexDataLabels;
-  plotOptions: ApexPlotOptions;
-  responsive: ApexResponsive[];
-  xaxis: ApexXAxis;
-  colors: string[];
-  grid: ApexGrid;
-  tooltip: ApexTooltip;
-  stroke: ApexStroke;
-};
 @Component({
   selector: 'app-vendor',
   templateUrl: './vendor.component.html',
@@ -197,7 +185,7 @@ export class VendorComponent {
     }
   }
 
-  manageShift() {debugger
+  manageShift() {
     this.vendorService.manageShift().subscribe({
       next: res => {
         if (res.status == 1) {

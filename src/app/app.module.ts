@@ -23,6 +23,7 @@ import { ToastrModule } from 'ngx-toastr';
 import { ProfileComponent } from './profile/profile.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { RequestHistoryComponent } from './history/request-history/request-history.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +41,7 @@ import { RouterModule } from '@angular/router';
     ConfigurationComponent,
     GuestComponent,
     ProfileComponent,
+    RequestHistoryComponent
   ],
   imports: [
     BrowserModule, 

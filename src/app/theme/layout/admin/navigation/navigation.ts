@@ -40,34 +40,34 @@ const NavigationItems = [
         icon: 'ti ti-dashboard',
         breadcrumbs: false
       },
-      {
-        id: 'Profile',
-        title: 'Profile',
-        type: 'item',
-        classes: 'nav-item',
-        url: '/profile',
-        icon: 'ti ti-typography',
-        target: false,
-        external: false
-      },
+      // {
+      //   id: 'Profile',
+      //   title: 'Profile',
+      //   type: 'item',
+      //   classes: 'nav-item',
+      //   url: '/profile',
+      //   icon: 'ti ti-user',
+      //   target: false,
+      //   external: false
+      // },
       {
         id: 'RequestHistory',
         title: 'Request History',
         type: 'item',
         classes: 'nav-item',
-        url: '/color',
-        icon: 'ti ti-brush'
+        url: '/request-history',
+        icon: 'ti ti-table'
       },
-      {
-        id: 'Logout',
-        title: 'Logout',
-        type: 'item',
-        classes: 'nav-item',
-        url: '/logout',
-        icon: 'ti ti-plant-2',
-        target: false,
-        external: false
-      }
+      // {
+      //   id: 'Logout',
+      //   title: 'Logout',
+      //   type: 'item',
+      //   classes: 'nav-item',
+      //   url: '/logout',
+      //   icon: 'ti ti-arrow-left-circle',
+      //   target: false,
+      //   external: false
+      // }
     ]
   }
 
