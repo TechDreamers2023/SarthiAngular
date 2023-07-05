@@ -83,6 +83,10 @@ export class VendorComponent {
     private vendorService: VendorService,
     private toastr: ToastrService,
     private router: Router) {
+
+     
+
+
     let current_url = this.location.path();
     if (this.location['_baseHref']) {
       current_url = this.location['_baseHref'] + this.location.path();
@@ -95,7 +99,10 @@ export class VendorComponent {
   }
 
   // Life cycle events
-  ngOnInit(): void {
+  ngOnInit(): void {debugger
+    if(localStorage.getItem('UserTypeID') == '2'){
+      this.router.navigate(['/customer']);
+    }
     if (localStorage.getItem("UserTypeID") != undefined) {
       //Check shift status..
       this.getShiftStatus();
