@@ -62,3 +62,9 @@ export class TrackServiceModel {
     dateString : string;
     timeString : string; 
 }
+
+export class PastHistoryModel { 
+    pastStageId: number = 0;
+    requestNumber: string; 
+    message:string;
+}
