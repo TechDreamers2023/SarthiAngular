@@ -22,6 +22,7 @@ export class RequestVendorModel {
     expireDateTime: Date;
     pickupLocation: AddressModel;
     UserId: number;
+    requestNumber:string;
     vendorDetails: RequestVendorDetailsModel[];
 }
 
@@ -52,4 +53,12 @@ export class RequestVendorDetailsModel {
 export class RequestPostViewModel {
     customerId: number;
     quoationDetailedId: number;
+}
+
+export class TrackServiceModel {
+    RequestId: number;
+    stageId : string;
+    stageName : string;
+    dateString : string;
+    timeString : string; 
 }

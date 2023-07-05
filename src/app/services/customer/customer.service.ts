@@ -33,4 +33,11 @@ export class CustomerService {
     console.log(requestPostViewModel);
     return this.http.post<any>(environment.devurl + "/api/Request/AcceptQuotationByCustomer",requestPostViewModel, { 'headers': headers });
   }
+
+  public GetActiveCustomerRequest(customerId: number): Observable<any> {
+    return this.http.get<any>(environment.devurl + "/api/Request/GetCustomerServiceRequest?customerId=" + customerId);
+  }
+  public GetTrackServiceRequest(customerId: number): Observable<any> {
+    return this.http.get<any>(environment.devurl + "/api/Common/GetTrackServiceRequest?userId=" + customerId);
+  }
 }
