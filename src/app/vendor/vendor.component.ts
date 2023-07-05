@@ -108,8 +108,6 @@ export class VendorComponent {
         //Check shift status..
         this.getShiftStatus();
       }
-
-      this.observableTimer();
     }
     else {
       this.router.navigate(['/login']);
@@ -166,6 +164,7 @@ export class VendorComponent {
           if (res.data) {
             this.requestData = res.data;
             console.log("Request Data", res.data);
+            this.observableTimer();
           }
         }
         else {
