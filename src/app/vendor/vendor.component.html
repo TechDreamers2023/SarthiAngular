@@ -15,33 +15,35 @@
     <div class="card" *ngIf="requestData && IsShiftStarted && requestData.currentStageId > 0">
       <div class="card-body">
         <div class="row mb-3 align-items-center">
-          <div class="col-md-6 col-sm-6 col-lg-3">
+          <div class="col-md-6 col-sm-6 col-lg-2">
             <span class="float-left timer-text">{{
               subscribeTimer * 1000 | date:'mm:ss':'UTC' }}
             </span>
           </div>
-          <div class="col-md-6 col-sm-6 col-lg-4">
-            <h4 class="float-left" style="color: #0b4f8b;"><small>REQUEST NUMBER</small> {{requestData.requestNumber}}
-            </h4>
+          <div class="col-md-6 col-sm-6 col-lg-5">
+            <div class="float-left" style="color: #0b4f8b;">
+              <span><small>REQUEST NUMBER</small></span>
+              <h3>{{requestData.requestNumber}}</h3>
+            </div>
           </div>
 
           <div class="col-md-6 col-sm-6 col-lg-5">
-            <button type="button" *ngIf="requestData.currentStageId == 2" class="btn btn-danger float-right"
+            <button type="button" *ngIf="requestData.currentStageId == 2" class="btn btn-danger float-right me-2"
               (click)="rejectQuotation()">Reject</button>
             <button type="button" *ngIf="requestData.currentStageId == 2" class="btn btn-success float-right me-2"
               (click)="accceptQuotation()">Accept</button>
-            <button type="button" *ngIf="requestData.currentStageId == 3" class="btn btn-success float-right"
+            <button type="button" *ngIf="requestData.currentStageId == 3" class="btn btn-success float-right me-2"
               (click)="changeStatus(4)">Reached To Pickup</button>
-            <button type="button" *ngIf="requestData.currentStageId == 4" class="btn btn-success float-right"
+            <button type="button" *ngIf="requestData.currentStageId == 4" class="btn btn-success float-right me-2"
               (click)="changeStatus(5)">Pickup Done</button>
-            <button type="button" *ngIf="requestData.currentStageId == 5" class="btn btn-success float-right"
+            <button type="button" *ngIf="requestData.currentStageId == 5" class="btn btn-success float-right me-2"
               (click)="changeStatus(6)">Reached To Drop Off</button>
-            <button type="button" *ngIf="requestData.currentStageId == 6" class="btn btn-success float-right"
+            <button type="button" *ngIf="requestData.currentStageId == 6" class="btn btn-success float-right me-2"
               (click)="changeStatus(7)">Payment Done</button>
-            <button type="button" *ngIf="requestData.currentStageId == 7" class="btn btn-success float-right"
+            <button type="button" *ngIf="requestData.currentStageId == 7" class="btn btn-success float-right me-2"
               (click)="changeStatus(8)">Completed</button>
             <button type="button" disabled *ngIf="requestData.currentStageId == 9 || requestData.currentStageId == 10"
-              class="btn btn-default float-right">Quotation
+              class="btn btn-default float-right me-2">Quotation
               Rejected</button>
           </div>
         </div>
