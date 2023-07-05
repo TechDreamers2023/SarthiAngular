@@ -66,5 +66,5 @@ export class TrackServiceModel {
 export class PastHistoryModel { 
     pastStageId: number = 0;
     requestNumber: string; 
-    message:string;
+    message:string; 
 }
