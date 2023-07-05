@@ -152,7 +152,7 @@
       <div class="card-body">
         <div class="row mb-3 align-items-center">
           <div class="col">
-            <h4>Available Venders</h4>
+            <h4>Available Venders - <b>{{vendorModel.requestNumber}}</b></h4>
           </div>
           <div class="col-auto"> </div>
         </div>
@@ -176,7 +176,7 @@
                 <button *ngIf="list.isCustomerAccepted == true" type="button" style="cursor: no-drop;"
                   class="btn btn-warning float-right">Pending</button>
                 <button *ngIf="list.isRejectedByVendor == true" type="button" style="cursor: no-drop;"
-                  class="btn btn-warning float-right">Pending</button>
+                  class="btn btn-warning float-right">Rejected</button>
               </div>
             </div>
           </li>
@@ -420,3 +420,57 @@
     </div>
   </div>
 </div>
+
+
+
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<button id="modelSuccess" style="display:none;" class="btn btn-lg btn-outline-primary" (click)="open(mymodal)">Open My Modal</button>
+
+<ng-template #mymodal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Notification</h4>
+  </div>
+  <div class="modal-body">
+    <div class="row align-items-start">
+      <svg *ngIf="modelInfo.isSuccess" style="color: green;" xmlns="http://www.w3.org/2000/svg" width="100" height="100" fill="currentColor"
+        class="bi bi-check-circle" viewBox="0 0 16 16">
+        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+        <path
+          d="M10.97 4.97a.235.235 0 0 0-.02.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05z" />
+      </svg>
+      <svg *ngIf="!modelInfo.isSuccess"  style="color:red" xmlns="http://www.w3.org/2000/svg" width="100" height="100" fill="currentColor"
+      class="bi bi-x-circle" viewBox="0 0 16 16">
+      <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+      <path
+        d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
+    </svg>
+      <div class="col-sm-6 com-md-12 col-lg-12 mb-2" style="margin-top: 5%;text-align: center;">
+        <span><small style="font-size: 17px;">
+          {{modelInfo.modelMessage}}
+        </small></span>
+      </div> 
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Close</button>
+  </div>
+</ng-template>

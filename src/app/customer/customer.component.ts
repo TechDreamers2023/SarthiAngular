@@ -1,9 +1,9 @@
 // Angular Import
 import { Component, NgZone, OnInit, ViewChild } from '@angular/core';
-import {  PastHistoryModel, PlaceSearchResult, RequestPostViewModel, RequestVendorDetailsModel, RequestVendorModel, TrackServiceModel } from './model/place-search-result';
+import { PastHistoryModel, PlaceSearchResult, RequestPostViewModel, RequestVendorDetailsModel, RequestVendorModel, TrackServiceModel } from './model/place-search-result';
 import { Location, LocationStrategy } from '@angular/common';
 import { SharedModule } from 'src/app/theme/shared/shared.module';
-import { NgbNavChangeEvent } from '@ng-bootstrap/ng-bootstrap';
+import { ModalDismissReasons, NgbActiveModal, NgbModal, NgbNavChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 import { BerryConfig } from '../app-config';
 import { CustomerService } from '../services/customer/customer.service';
 import { ToastrService } from 'ngx-toastr';
@@ -31,23 +31,28 @@ export class CustomerComponent {
   showLocationFilter: boolean = true;
   stageId: number = 0;
   trackServiceModel: TrackServiceModel[];
-
-  pastHistoryModel : PastHistoryModel = {
-
-    pastStageId : 0,
-
-    message:"",
-
-    requestNumber:""
-
+  pastHistoryModel: PastHistoryModel = {
+    pastStageId: 0,
+    message: "",
+    requestNumber: ""
   }
+
+  modelInfo = {
+    isSuccess: false,
+    modelMessage: ""
+  }
+
+  title = 'appBootstrap';
+  closeResult: string = '';
+
   // Constructor
   constructor(private zone: NgZone,
     private location: Location,
     private locationStrategy: LocationStrategy,
     private customerService: CustomerService,
     private toastr: ToastrService,
-    private router: Router) {
+    private router: Router,
+    private modalService: NgbModal) {
 
     let current_url = this.location.path();
     if (this.location['_baseHref']) {
@@ -118,9 +123,11 @@ export class CustomerComponent {
           if (this.responces.status == 0) {
             this.toastr.error(response.message)
           }
+
           if (this.responces.status == 2) {
             this.showLocationFilter = true;
             this.loadPastHistoryServiceRequest();
+            clearInterval(this.statusSubscription);
           }
         },
         (error) => {
@@ -222,36 +229,32 @@ export class CustomerComponent {
         (response) => {
           console.log(response);
           if (response.status == 1) {
-            let message : string;
+            let message: string;
 
-            if (response.data.pastStageId == 8)
-            {
+            if (response.data.pastStageId == 8) {
               message = "Request has been completed successfully";
             }
-           
-            if (response.data.pastStageId == 9)
-            {
+
+            if (response.data.pastStageId == 9) {
               message = "Request has been cancelled by vendor";
             }
 
-            if (response.data.pastStageId == 10)
-            {
+            if (response.data.pastStageId == 10) {
               message = "Request has been cancelled by customer";
             }
 
             this.pastHistoryModel = {
-              pastStageId :response.data.pastStageId,
-              requestNumber : response.data.requestNumber,
-              message:message
+              pastStageId: response.data.pastStageId,
+              requestNumber: response.data.requestNumber,
+              message: message
             }
             console.log(this.pastHistoryModel);
-            
           }
-          else{
+          else {
             this.pastHistoryModel = {
-              pastStageId :0,
-              requestNumber : "N/A",
-              message:"N/A"
+              pastStageId: 0,
+              requestNumber: "N/A",
+              message: "N/A"
             }
           }
         },
@@ -264,8 +267,28 @@ export class CustomerComponent {
         })
   }
 
+
   ontriggerRequestChanged(data) {
     this.getCurrentRequestStatus(this.customerId);
+
+    this.modelInfo = {
+      isSuccess: data.isSuccess,
+      modelMessage: data.message
+    }
+
+    let element: HTMLElement = document.getElementById('modelSuccess') as HTMLElement;
+    // add this condition will solve issue  
+    if (element) {
+      element.click();
+    }
+
+    if (data.isSuccess) {
+      this.statusSubscription = setInterval(() => {
+        const res =
+          this.getCurrentRequestStatus(this.customerId);
+      }, 50000);
+    }
+
   }
 
   // public method
@@ -296,7 +319,27 @@ export class CustomerComponent {
       }
     });
   }
-  RedirectToHistory(){
+  RedirectToHistory() {
     this.router.navigate(['/request-history']);
   }
+
+  open(content: any) {
+    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
+  }
+
 }
+

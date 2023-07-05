@@ -19,7 +19,7 @@ export class MapDisplayComponent implements OnInit {
   @Input() stageId: number = 0;
   @Input() from: PlaceSearchResult | undefined;
   @Input() to: PlaceSearchResult | undefined;
-  @Output() triggerRequestChanged = new EventEmitter<boolean>();
+  @Output() triggerRequestChanged = new EventEmitter<any>();
   markerPositions: google.maps.LatLng[] = [];
   mapOptions: google.maps.MapOptions;
   center = {
@@ -77,11 +77,18 @@ export class MapDisplayComponent implements OnInit {
 
       this.customerService.GenerateServiceRequest(this.requestViewModel).subscribe((response) => {
         if (response.status == 0 || response.status == 2) {
-          this.toastr.error(response.message)
+          var info = {
+            isSuccess: false,
+            message: response.message
         }
-        if (response.status == 1) {
-          this.toastr.success(response.message)
-          this.triggerRequestChanged.emit(true);
+          this.triggerRequestChanged.emit(info);
+        }
+        if (response.status == 1) { 
+          var info = {
+            isSuccess: true,
+            message: response.message
+          }
+          this.triggerRequestChanged.emit(info);
         }
         console.log(response);
       },
