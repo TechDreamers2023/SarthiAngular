@@ -39,9 +39,6 @@ export class CustomerComponent {
     private customerService: CustomerService,
     private toastr: ToastrService,
     private router: Router) {
-      if(localStorage.getItem('UserTypeID') =='4'){
-        this.router.navigate(['/vendor']);
-      }
 
     let current_url = this.location.path();
     if (this.location['_baseHref']) {
@@ -56,14 +53,19 @@ export class CustomerComponent {
 
   ngOnInit() {
     if (localStorage.getItem("UserTypeID") != undefined) {
-      clearInterval(this.statusSubscription);
-      this.customerTypeId = +localStorage.getItem("UserTypeID");
-      this.customerId = +localStorage.getItem("UserID");
-      this.getCurrentRequestStatus(this.customerId);
-      this.statusSubscription = setInterval(() => {
-        const res =
-          this.getCurrentRequestStatus(this.customerId);
-      }, 50000);
+      if (localStorage.getItem('UserTypeID') == '4') {
+        this.router.navigate(['/vendor']);
+      }
+      else {
+        clearInterval(this.statusSubscription);
+        this.customerTypeId = +localStorage.getItem("UserTypeID");
+        this.customerId = +localStorage.getItem("UserID");
+        this.getCurrentRequestStatus(this.customerId);
+        this.statusSubscription = setInterval(() => {
+          const res =
+            this.getCurrentRequestStatus(this.customerId);
+        }, 50000);
+      }
     }
     else {
       this.router.navigate(['/login']);
@@ -100,7 +102,7 @@ export class CustomerComponent {
               this.showLocationFilter = false;
             }
             else {
-              
+
               this.showLocationFilter = true;
             }
           }

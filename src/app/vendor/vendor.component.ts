@@ -48,7 +48,7 @@ export class VendorComponent {
   navCollapsed: boolean;
   navCollapsedMob: boolean;
   windowWidth: number;
-  
+
   requestData: any = {
     currentStageId: 0,
     customerContactNo: "",
@@ -84,9 +84,6 @@ export class VendorComponent {
     private toastr: ToastrService,
     private router: Router) {
 
-     
-
-
     let current_url = this.location.path();
     if (this.location['_baseHref']) {
       current_url = this.location['_baseHref'] + this.location.path();
@@ -99,13 +96,15 @@ export class VendorComponent {
   }
 
   // Life cycle events
-  ngOnInit(): void {debugger
-    if(localStorage.getItem('UserTypeID') == '2'){
-      this.router.navigate(['/customer']);
-    }
+  ngOnInit(): void {
     if (localStorage.getItem("UserTypeID") != undefined) {
-      //Check shift status..
-      this.getShiftStatus();
+      if (localStorage.getItem('UserTypeID') == '2') {
+        this.router.navigate(['/customer']);
+      }
+      else {
+        //Check shift status..
+        this.getShiftStatus();
+      }
     }
     else {
       this.router.navigate(['/login']);
@@ -154,7 +153,7 @@ export class VendorComponent {
         if (res.status == 1) {
           if (res.data) {
             this.requestData = res.data;
-            console.log("Request Data",res.data);
+            console.log("Request Data", res.data);
           }
         }
         else {
