@@ -240,11 +240,8 @@ export class CustomerComponent {
               requestNumber : response.data.requestNumber,
               message:message
             }
-<<<<<<< HEAD
             console.log(this.pastHistoryModel);
-=======
             
->>>>>>> 244980786bc766054295ffa857a92ab123b8a40b
           }
           else{
             this.pastHistoryModel = {
