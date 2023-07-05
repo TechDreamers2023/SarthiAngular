@@ -31,11 +31,6 @@ export class CustomerComponent {
   showLocationFilter: boolean = true;
   stageId: number = 0;
   trackServiceModel: TrackServiceModel[];
-  pastHistoryModel: PastHistoryModel = {
-    pastStageId :0,
-    requestNumber : "N/A",
-    message:"Initial Loading"
-  }
 
   // Constructor
   constructor(private zone: NgZone,
@@ -115,8 +110,6 @@ export class CustomerComponent {
           }
           if (this.responces.status == 2) {
             this.showLocationFilter = true;
-            //Check the last transcation history
-            this.loadPastHistoryServiceRequest();
           }
         },
         (error) => {
@@ -291,10 +284,5 @@ export class CustomerComponent {
         this.getCurrentRequestStatus(this.customerId);
       }
     });
-  }
-
-  RedirectToHistory()
-  {
-    this.router.navigate(['/request-history']);
   }
 }
