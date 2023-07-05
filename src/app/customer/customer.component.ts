@@ -1,6 +1,6 @@
 // Angular Import
 import { Component, NgZone, OnInit, ViewChild } from '@angular/core';
-import { PlaceSearchResult, RequestPostViewModel, RequestVendorDetailsModel, RequestVendorModel } from './model/place-search-result';
+import { PlaceSearchResult, RequestPostViewModel, RequestVendorDetailsModel, RequestVendorModel, TrackServiceModel } from './model/place-search-result';
 import { Location, LocationStrategy } from '@angular/common';
 import { SharedModule } from 'src/app/theme/shared/shared.module';
 import { NgbNavChangeEvent } from '@ng-bootstrap/ng-bootstrap';
@@ -30,6 +30,7 @@ export class CustomerComponent {
   responces: any;
   showLocationFilter: boolean = true;
   stageId: number = 0;
+  trackServiceModel: TrackServiceModel[];
 
   // Constructor
   constructor(private zone: NgZone,
@@ -56,6 +57,10 @@ export class CustomerComponent {
       this.customerTypeId = +localStorage.getItem("UserTypeID");
       this.customerId = +localStorage.getItem("UserID");
       this.getCurrentRequestStatus(this.customerId);
+      this.statusSubscription = setInterval(() => {
+        const res =
+          this.getCurrentRequestStatus(this.customerId);
+      }, 50000);
     }
     else {
       this.router.navigate(['/login']);
@@ -71,22 +76,28 @@ export class CustomerComponent {
       .subscribe(
         (response) => {
           this.responces = response;
+          console.log(response);
           if (this.responces.status == 1) {
             if (this.responces.data.currentStageId < 8) {
               if (this.responces.data.currentStageId == 2) {
-                //Show Quoations
-                console.log('Show Quoations');
+                //Show Quoations 
                 this.loadAllQuoations();
               }
               else {
-                this.statusSubscription = setInterval(() => {
-                  const res =
-                    this.getCurrentRequestStatus(this.customerId);
-                }, 20000);
+                if ((this.responces.data.currentStageId == 3) ||
+                  (this.responces.data.currentStageId == 4)
+                  || (this.responces.data.currentStageId == 5)
+                  || (this.responces.data.currentStageId == 6)
+                  || (this.responces.data.currentStageId == 7)) {
+                  this.loadActiveCustomerRequest();
+                  this.loadTrackServiceRequest();
+                  this.stageId = this.responces.data.currentStageId;
+                }
               }
               this.showLocationFilter = false;
             }
             else {
+              
               this.showLocationFilter = true;
             }
           }
@@ -110,6 +121,7 @@ export class CustomerComponent {
     this.customerService.GetAllQuotationRequest(this.customerId)
       .subscribe(
         (response) => {
+          console.log(response);
           if (response.status == 1) {
             this.vendorModel = response.data;
             this.stageId = 2;
@@ -121,16 +133,71 @@ export class CustomerComponent {
           console.log("Something went wrong")
         },
         () => {
-
+          console.log(this.vendorModel);
           let pickUp: PlaceSearchResult =
-           {location:new google.maps.LatLng(this.vendorModel.pickupLocation.latitude, this.vendorModel.pickupLocation.longitude),
-             address:this.vendorModel.pickupLocation.address};
-             this.fromvalue = pickUp;
+          {
+            location: new google.maps.LatLng(this.vendorModel.pickupLocation.latitude, this.vendorModel.pickupLocation.longitude),
+            address: this.vendorModel.pickupLocation.address
+          };
+          this.fromvalue = pickUp;
 
-             let dropOff: PlaceSearchResult =
-             {location:new google.maps.LatLng(this.vendorModel.dropOffLocation.latitude, this.vendorModel.dropOffLocation.longitude),
-               address:this.vendorModel.dropOffLocation.address};
-               this.tovalue = dropOff;
+          let dropOff: PlaceSearchResult =
+          {
+            location: new google.maps.LatLng(this.vendorModel.dropOffLocation.latitude, this.vendorModel.dropOffLocation.longitude),
+            address: this.vendorModel.dropOffLocation.address
+          };
+          this.tovalue = dropOff;
+        })
+  }
+
+  loadActiveCustomerRequest() {
+    this.customerService.GetActiveCustomerRequest(this.customerId)
+      .subscribe(
+        (response) => {
+          console.log(response);
+          if (response.status == 1) {
+            this.vendorModel = response.data;
+            console.log(response.data);
+          }
+        },
+        (error) => {
+          this.toastr.error("Something went wrong, Please try Again ")                    //error() callback
+          console.log("Something went wrong")
+        },
+        () => {
+          console.log(this.vendorModel);
+          let pickUp: PlaceSearchResult =
+          {
+            location: new google.maps.LatLng(this.vendorModel.pickupLocation.latitude, this.vendorModel.pickupLocation.longitude),
+            address: this.vendorModel.pickupLocation.address
+          };
+          this.fromvalue = pickUp;
+
+          let dropOff: PlaceSearchResult =
+          {
+            location: new google.maps.LatLng(this.vendorModel.dropOffLocation.latitude, this.vendorModel.dropOffLocation.longitude),
+            address: this.vendorModel.dropOffLocation.address
+          };
+          this.tovalue = dropOff;
+        })
+  }
+
+  loadTrackServiceRequest() {
+    this.customerService.GetTrackServiceRequest(this.customerId)
+      .subscribe(
+        (response) => {
+          console.log(response);
+          if (response.status == 1) {
+            this.trackServiceModel = response.data;
+            console.log(this.trackServiceModel);
+          }
+        },
+        (error) => {
+          this.toastr.error("Something went wrong, Please try Again ")                    //error() callback
+          console.log("Something went wrong")
+        },
+        () => {
+
         })
   }
 
@@ -151,12 +218,12 @@ export class CustomerComponent {
   }
 
   requestAcceptViewModel: RequestPostViewModel = new RequestPostViewModel();
-  Accept(customerId : number , quoationDetailedId: number) {
+  Accept(customerId: number, quoationDetailedId: number) {
     this.requestAcceptViewModel.customerId = customerId;
     this.requestAcceptViewModel.quoationDetailedId = quoationDetailedId;
 
     this.customerService.AcceptQuotationByCustomer(this.requestAcceptViewModel).subscribe(response => {
-     console.log(response.status);
+      console.log(response.status);
       if (response.status == 0 || response.status == 2) {
         this.toastr.error(response.message);
       }
