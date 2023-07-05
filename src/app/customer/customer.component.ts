@@ -1,6 +1,6 @@
 // Angular Import
 import { Component, NgZone, OnInit, ViewChild } from '@angular/core';
-import { PlaceSearchResult, RequestPostViewModel, RequestVendorDetailsModel, RequestVendorModel, TrackServiceModel } from './model/place-search-result';
+import { PastHistoryModel, PlaceSearchResult, RequestPostViewModel, RequestVendorDetailsModel, RequestVendorModel, TrackServiceModel } from './model/place-search-result';
 import { Location, LocationStrategy } from '@angular/common';
 import { SharedModule } from 'src/app/theme/shared/shared.module';
 import { NgbNavChangeEvent } from '@ng-bootstrap/ng-bootstrap';
@@ -31,6 +31,11 @@ export class CustomerComponent {
   showLocationFilter: boolean = true;
   stageId: number = 0;
   trackServiceModel: TrackServiceModel[];
+  pastHistoryModel: PastHistoryModel = {
+    pastStageId :0,
+    requestNumber : "N/A",
+    message:"Initial Loading"
+  }
 
   // Constructor
   constructor(private zone: NgZone,
@@ -97,7 +102,6 @@ export class CustomerComponent {
               this.showLocationFilter = false;
             }
             else {
-              
               this.showLocationFilter = true;
             }
           }
@@ -106,6 +110,8 @@ export class CustomerComponent {
           }
           if (this.responces.status == 2) {
             this.showLocationFilter = true;
+            //Check the last transcation history
+            this.loadPastHistoryServiceRequest();
           }
         },
         (error) => {
@@ -201,6 +207,53 @@ export class CustomerComponent {
         })
   }
 
+  loadPastHistoryServiceRequest() {
+    this.customerService.GetPastTrackServiceRequest(this.customerId)
+      .subscribe(
+        (response) => {
+          console.log(response);
+          if (response.status == 1) {
+            let message : string;
+
+            if (response.data.pastStageId == 8)
+            {
+              message = "Request has been completed successfully";
+            }
+           
+            if (response.data.pastStageId == 9)
+            {
+              message = "Request has been cancelled by vendor";
+            }
+
+            if (response.data.pastStageId == 10)
+            {
+              message = "Request has been cancelled by customer";
+            }
+
+            this.pastHistoryModel = {
+              pastStageId :response.data.pastStageId,
+              requestNumber : response.data.requestNumber,
+              message:message
+            }
+            console.log(this.pastHistoryModel);
+          }
+          else{
+            this.pastHistoryModel = {
+              pastStageId :0,
+              requestNumber : "N/A",
+              message:"N/A"
+            }
+          }
+        },
+        (error) => {
+          this.toastr.error("Something went wrong, Please try Again ")                    //error() callback
+          console.log("Something went wrong")
+        },
+        () => {
+
+        })
+  }
+
   ontriggerRequestChanged(data) {
     this.getCurrentRequestStatus(this.customerId);
   }
@@ -232,5 +285,10 @@ export class CustomerComponent {
         this.getCurrentRequestStatus(this.customerId);
       }
     });
+  }
+
+  RedirectToHistory()
+  {
+    this.router.navigate(['/request-history']);
   }
 }
