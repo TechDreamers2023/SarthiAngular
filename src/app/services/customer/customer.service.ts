@@ -40,4 +40,8 @@ export class CustomerService {
   public GetTrackServiceRequest(customerId: number): Observable<any> {
     return this.http.get<any>(environment.devurl + "/api/Common/GetTrackServiceRequest?userId=" + customerId);
   }
+
+  public GetPastTrackServiceRequest(customerId: number): Observable<any> {
+    return this.http.get<any>(environment.devurl + "/api/Common/GetPastHistoyDeatilsCustomer?userId=" + customerId);
+  }
 }
