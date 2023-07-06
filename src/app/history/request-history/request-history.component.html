@@ -2,10 +2,25 @@
     <div class="col-sm-6 col-xl-12 col-md-12" *ngIf="requestData && requestData.length > 0">
         <div class="card" *ngFor="let item of requestData">
             <div class="card-body" *ngIf="userTypeId == 4">
+                <div class="row mb-3 align-items-center">
+                    <div class="col-sm-6 com-md-6 col-lg-6">
+                        <div class="float-left" style="color: #673ab7;">
+                            <span><small>REQUEST NUMBER</small></span>
+                            <h3>{{item.requestNumber}}</h3>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 com-md-6 col-lg-6">
+                        <div class="float-right" style="color: #673ab7;">
+                            <span><small>STATUS</small></span>
+                            <h3>{{item.stageName}}</h3>
+                        </div>
+                    </div>
+                </div>
+                <hr />
                 <div class="row align-items-start">
                     <div class="col-sm-6 com-md-6 col-lg-3 mb-2">
-                        <h5 class="mb-0 text-muted">Request Number</h5>
-                        <h4>{{item.requestNumber}}</h4>
+                        <h5 class="mb-0 text-muted">Request Date</h5>
+                        <h4>{{item.requestDateTime | date:'dd MMM, yyyy hh:mm a' }}</h4>
                     </div>
                     <div class="col-sm-6 com-md-6 col-lg-3 mb-2">
                         <h5 class="mb-0 text-muted">Customer</h5>
@@ -15,9 +30,15 @@
                         <h5 class="mb-0 text-muted">Contact</h5>
                         <h4>{{item.customerContactNo}}</h4>
                     </div>
-                    <div class="col-sm-6 com-md-6 col-lg-3 mb-2">
+                    <div class="col-sm-6 com-md-6 col-lg-3 mb-2"
+                        *ngIf="item.currentStageId == 9 || item.currentStageId == 10">
+                        <h5 class="mb-0 text-muted">Cancelled Date</h5>
+                        <h4>{{item.actionDatetime | date:'dd MMM, yyyy hh:mm a' }}</h4>
+                    </div>
+                    <div class="col-sm-6 com-md-6 col-lg-3 mb-2"
+                        *ngIf="item.currentStageId != 9 && item.currentStageId != 10">
                         <h5 class="mb-0 text-muted">Payment Date</h5>
-                        <h4>{{item.paymentDateTime | date:'dd MMM, yyyy hh:mm a'}}</h4>
+                        <h4>{{item.paymentDateTime | date:'dd MMM, yyyy hh:mm a' }}</h4>
                     </div>
                     <div class="col-sm-6 com-md-6 col-lg-3 mb-2">
                         <h5 class="mb-0 text-muted">Vehicle Number</h5>
@@ -52,6 +73,21 @@
                 </div>
             </div>
             <div class="card-body" *ngIf="userTypeId == 2">
+                <div class="row mb-3 align-items-center">
+                    <div class="col-sm-6 com-md-6 col-lg-6">
+                        <div class="float-left" style="color: #673ab7;">
+                            <span><small>REQUEST NUMBER</small></span>
+                            <h3>{{item.requestNumber}}</h3>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 com-md-6 col-lg-6">
+                        <div class="float-right" style="color: #673ab7;">
+                            <span><small>STATUS</small></span>
+                            <h3>{{item.stageName}}</h3>
+                        </div>
+                    </div>
+                </div>
+                <hr />
                 <div class="row align-items-start">
                     <div class="col-sm-6 com-md-6 col-lg-3 mb-2">
                         <h5 class="mb-0 text-muted">Request Number</h5>
@@ -65,9 +101,15 @@
                         <h5 class="mb-0 text-muted">Contact</h5>
                         <h4>{{item.vendorContactNo}}</h4>
                     </div>
-                    <div class="col-sm-6 com-md-6 col-lg-3 mb-2">
+                    <div class="col-sm-6 com-md-6 col-lg-3 mb-2"
+                        *ngIf="item.currentStageId == 9 || item.currentStageId == 10">
+                        <h5 class="mb-0 text-muted">Cancelled Date</h5>
+                        <h4>{{item.actionDatetime | date:'dd MMM, yyyy hh:mm a' }}</h4>
+                    </div>
+                    <div class="col-sm-6 com-md-6 col-lg-3 mb-2"
+                        *ngIf="item.currentStageId != 9 && item.currentStageId != 10">
                         <h5 class="mb-0 text-muted">Payment Date</h5>
-                        <h4>{{item.paymentDateTime | date:'dd MMM, yyyy hh:mm a'}}</h4>
+                        <h4>{{item.paymentDateTime | date:'dd MMM, yyyy hh:mm a' }}</h4>
                     </div>
                     <div class="col-sm-6 com-md-6 col-lg-3 mb-2">
                         <h5 class="mb-0 text-muted">Vehicle Number</h5>

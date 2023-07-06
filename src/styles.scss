@@ -52,14 +52,14 @@ $pc-secondary: map-get($preset-colors, 'preset-1', 'secondary');
     color: red;
 }
 .timer-text{
-    height: 70px;
+    height: 55px;
     border: 5px solid #e1d8f1;
     border-radius: 50%;
-    width: 70px;
+    width: 55px;
     text-align: center;
     vertical-align: middle;
-    padding-top: 17px;
-    font-size: 18px;
+    padding-top: 13px;
+    font-size: 14px;
     font-weight: 700;
     color: #6741b9;
 }
