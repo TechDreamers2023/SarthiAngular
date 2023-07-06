@@ -23,6 +23,7 @@ export class RequestVendorModel {
     pickupLocation: AddressModel;
     UserId: number;
     requestNumber:string;
+    requestId : number;
     vendorDetails: RequestVendorDetailsModel[];
 }
 
@@ -53,6 +54,11 @@ export class RequestVendorDetailsModel {
 export class RequestPostViewModel {
     customerId: number;
     quoationDetailedId: number;
+}
+
+export class RequestRejectViewModel {
+    customerId: number;
+    requestId: number;
 }
 
 export class TrackServiceModel {

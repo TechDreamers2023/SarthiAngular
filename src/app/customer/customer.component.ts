@@ -1,6 +1,6 @@
 // Angular Import
 import { Component, NgZone, OnInit, ViewChild } from '@angular/core';
-import { PastHistoryModel, PlaceSearchResult, RequestPostViewModel, RequestVendorDetailsModel, RequestVendorModel, TrackServiceModel } from './model/place-search-result';
+import { PastHistoryModel, PlaceSearchResult, RequestPostViewModel, RequestRejectViewModel, RequestVendorDetailsModel, RequestVendorModel, TrackServiceModel } from './model/place-search-result';
 import { Location, LocationStrategy } from '@angular/common';
 import { SharedModule } from 'src/app/theme/shared/shared.module';
 import { ModalDismissReasons, NgbActiveModal, NgbModal, NgbNavChangeEvent } from '@ng-bootstrap/ng-bootstrap';
@@ -78,7 +78,7 @@ export class CustomerComponent {
         this.statusSubscription = setInterval(() => {
           const res =
             this.getCurrentRequestStatus(this.customerId);
-        }, 50000);
+        }, 3000);
       }
     }
     else {
@@ -94,8 +94,8 @@ export class CustomerComponent {
     this.customerService.GetCurrentStatusByCustomer(customerId)
       .subscribe(
         (response) => {
-          this.responces = response;
           console.log(response);
+          this.responces = response;
           if (this.responces.status == 1) {
             if (this.responces.data.currentStageId < 8) {
               if (this.responces.data.currentStageId == 2) {
@@ -131,8 +131,7 @@ export class CustomerComponent {
           }
         },
         (error) => {
-          this.toastr.error("Something went wrong, Please try Again ")                    //error() callback
-          console.log("Something went wrong")
+          this.toastr.error("Something went wrong, Please try Again ")
         },
         () => {                                   //complete() callback
 
@@ -143,19 +142,15 @@ export class CustomerComponent {
     this.customerService.GetAllQuotationRequest(this.customerId)
       .subscribe(
         (response) => {
-          console.log(response);
           if (response.status == 1) {
             this.vendorModel = response.data;
             this.stageId = 2;
-            console.log(response.data);
           }
         },
         (error) => {
-          this.toastr.error("Something went wrong, Please try Again ")                    //error() callback
-          console.log("Something went wrong")
+          this.toastr.error("Something went wrong, Please try Again ")
         },
         () => {
-          console.log(this.vendorModel);
           let pickUp: PlaceSearchResult =
           {
             location: new google.maps.LatLng(this.vendorModel.pickupLocation.latitude, this.vendorModel.pickupLocation.longitude),
@@ -176,7 +171,6 @@ export class CustomerComponent {
     this.customerService.GetActiveCustomerRequest(this.customerId)
       .subscribe(
         (response) => {
-          console.log(response);
           if (response.status == 1) {
             this.vendorModel = response.data;
             console.log(response.data);
@@ -184,7 +178,6 @@ export class CustomerComponent {
         },
         (error) => {
           this.toastr.error("Something went wrong, Please try Again ")                    //error() callback
-          console.log("Something went wrong")
         },
         () => {
           console.log(this.vendorModel);
@@ -208,7 +201,6 @@ export class CustomerComponent {
     this.customerService.GetTrackServiceRequest(this.customerId)
       .subscribe(
         (response) => {
-          console.log(response);
           if (response.status == 1) {
             this.trackServiceModel = response.data;
             console.log(this.trackServiceModel);
@@ -228,6 +220,7 @@ export class CustomerComponent {
       .subscribe(
         (response) => {
           console.log(response);
+          console.log(this.stageId);
           if (response.status == 1) {
             let message: string;
 
@@ -248,7 +241,6 @@ export class CustomerComponent {
               requestNumber: response.data.requestNumber,
               message: message
             }
-            console.log(this.pastHistoryModel);
           }
           else {
             this.pastHistoryModel = {
@@ -270,7 +262,6 @@ export class CustomerComponent {
 
   ontriggerRequestChanged(data) {
     this.getCurrentRequestStatus(this.customerId);
-
     this.modelInfo = {
       isSuccess: data.isSuccess,
       modelMessage: data.message
@@ -286,7 +277,7 @@ export class CustomerComponent {
       this.statusSubscription = setInterval(() => {
         const res =
           this.getCurrentRequestStatus(this.customerId);
-      }, 50000);
+      }, 3000);
     }
 
   }
@@ -307,9 +298,7 @@ export class CustomerComponent {
   Accept(customerId: number, quoationDetailedId: number) {
     this.requestAcceptViewModel.customerId = customerId;
     this.requestAcceptViewModel.quoationDetailedId = quoationDetailedId;
-
     this.customerService.AcceptQuotationByCustomer(this.requestAcceptViewModel).subscribe(response => {
-      console.log(response.status);
       if (response.status == 0 || response.status == 2) {
         this.toastr.error(response.message);
       }
@@ -319,6 +308,34 @@ export class CustomerComponent {
       }
     });
   }
+
+  requestRejectViewModel: RequestRejectViewModel = new RequestRejectViewModel();
+  CancelRequest(customerId: number, requestId: number) {
+    this.requestRejectViewModel.customerId = customerId;
+    this.requestRejectViewModel.requestId = requestId;
+    this.customerService.RejectRequestByCustomer(this.requestRejectViewModel).subscribe(response => {
+      if (response.status == 0 || response.status == 2) {
+        this.toastr.error(response.message);
+      }
+      else {
+        this.stageId = 0;
+        this.getCurrentRequestStatus(this.customerId);
+        this.fromvalue = null;
+        this.tovalue = null;
+        this.modelInfo = {
+          isSuccess: true,
+          modelMessage: response.message
+        }
+
+        let element: HTMLElement = document.getElementById('modelSuccess') as HTMLElement;
+        // add this condition will solve issue  
+        if (element) {
+          element.click();
+        }
+      }
+    });
+  }
+
   RedirectToHistory() {
     this.router.navigate(['/request-history']);
   }
@@ -340,6 +357,5 @@ export class CustomerComponent {
       return `with: ${reason}`;
     }
   }
-
 }
 

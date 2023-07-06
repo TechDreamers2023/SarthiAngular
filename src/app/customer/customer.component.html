@@ -149,15 +149,16 @@
   </div>
   <div class="col-xl-4 col-md-12" *ngIf="stageId == 2">
     <div class="card">
-      <div class="card-body">
-        <div class="row mb-3 align-items-center">
+      <div class="card-body" style="margin-bottom: -20px;">
+        <div class="row align-items-center">
           <div class="col">
             <h4>Available Venders - <b>{{vendorModel.requestNumber}}</b></h4>
           </div>
           <div class="col-auto"> </div>
         </div>
         <ul class="list-group list-group-flush">
-          <li class="list-group-item px-0" *ngFor="let list of vendorModel.vendorDetails">
+          <li style="padding-top: 0;" class="list-group-item px-0" *ngFor="let list of vendorModel.vendorDetails">
+            <hr/>
             <div class="row align-items-start">
               <div class="col">
                 <h5 class="mb-0">{{ list.firstName }} {{ list.lastName }}</h5>
@@ -172,11 +173,18 @@
             <div class="row align-items-start">
               <div class="col">
                 <button *ngIf="list.isCustomerAccepted == null" type="button" class="btn btn-success float-right"
-                  (click)="Accept(this.customerId,list.quoationDetailId)">Accept</button>
+                  (click)="Accept(this.customerId,list.quoationDetailId)">Send Request</button>
                 <button *ngIf="list.isCustomerAccepted == true" type="button" style="cursor: no-drop;"
-                  class="btn btn-warning float-right">Pending</button>
+                  class="btn btn-warning float-right">Request Pending</button>
                 <button *ngIf="list.isRejectedByVendor == true" type="button" style="cursor: no-drop;"
-                  class="btn btn-warning float-right">Rejected</button>
+                  class="btn btn-warning float-right">Request Rejected</button>
+              </div>
+            </div>
+            <hr/>
+            <div class="row align-items-start" *ngIf="stageId < 4">
+              <div class="col rejectButton" style="margin-top:0%;">
+                <button type="button" class="btn btn-danger"
+                  (click)="CancelRequest(this.customerId,vendorModel.requestId)">Cancel Request</button>
               </div>
             </div>
           </li>
@@ -184,7 +192,7 @@
       </div>
     </div>
   </div>
-  <div class="col-xl-4 col-md-12" *ngIf="stageId > 2">
+  <div class="col-xl-4 col-md-12" *ngIf="stageId > 2 && stageId < 8">
     <div class="card">
       <div class="card-body">
         <div class="row mb-3 align-items-center">
@@ -297,13 +305,13 @@
     </div>
   </div>
 
-  <div class="col-xl-8 col-md-8" *ngIf="stageId > 2">
+  <div class="col-xl-8 col-md-8" *ngIf="stageId > 2 && stageId < 8">
     <div class="card">
       <div class="card-body">
       </div>
     </div>
   </div>
-  <div class="col-xl-4 col-md-4" *ngIf="stageId > 2">
+  <div class="col-xl-4 col-md-4" *ngIf="stageId > 2 && stageId < 8">
     <div class="card latest-update-card">
       <div class="card-header">
         <h5>Track Service Request</h5>
