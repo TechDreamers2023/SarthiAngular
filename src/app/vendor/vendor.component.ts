@@ -173,9 +173,34 @@ export class VendorComponent {
           }
         }
         else {
-          // if (res.message) {
-          //   this.toastr.error(res.message, 'Error!');
-          // }
+          this.requestData = {
+            currentStageId: 0,
+            customerContactNo: "",
+            customerFirstName: "",
+            customerId: 1,
+            customerLastName: "",
+            distanceKM: 0,
+            dropOffLatitude: 0,
+            dropOffLocation: "",
+            dropOffLongitude: 0,
+            durationInMins: "",
+            isCustomerAccepted: true,
+            isRejectedByVendor: false,
+            pickUpLocation: "",
+            pickupLatitude: 0,
+            pickupLongitude: 0,
+            quoationDetailId: 0,
+            requestExpireTime: "",
+            requestId: 0,
+            requestNumber: "",
+            totalAmount: 0,
+            vehicleNumber: "",
+            vendorContactNo: "",
+            vendorFirstName: "",
+            vendorLastName: "",
+            vendorLatitude: 0,
+            vendorLongitude: 0,
+          }
         }
       },
       error: err => {
@@ -265,6 +290,7 @@ export class VendorComponent {
   changeStatus(_stage: number) {
     this.vendorService.UpdateRequestStatus({ requestId: this.requestData.requestId, userId: parseInt(localStorage.getItem('UserID')), stageId: _stage }).subscribe({
       next: res => {
+        debugger
         if (res.status == 1) {
           this.getGetVendorActiveRequest();
           this.toastr.success(res.message, 'Success!');
