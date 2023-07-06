@@ -173,7 +173,6 @@ export class VendorComponent {
           }
         }
         else {
-          this.requestData = null;
           // if (res.message) {
           //   this.toastr.error(res.message, 'Error!');
           // }
@@ -188,7 +187,7 @@ export class VendorComponent {
   RedirectToHistory() {
     this.router.navigate(['/request-history']);
   }
-  
+
   saveVendorLocation() {
     const data = {
       vendorId: localStorage.getItem("UserID"),
