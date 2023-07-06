@@ -12,6 +12,39 @@
         </div>
       </div>
     </div>
+    <div class="card" *ngIf="!IsShiftStarted || requestData.currentStageId == 0">
+      <div class="card-body">
+        <div class="row mb-3 align-items-center">
+          <div class="col">
+            <h3>Customer's Request</h3>
+          </div>
+        </div>
+        <hr />
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item px-0">
+            <div class="row align-items-start">
+              <svg style="color:red" xmlns="http://www.w3.org/2000/svg" width="100" height="100" fill="currentColor"
+                class="bi bi-x-circle" viewBox="0 0 16 16">
+                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+                <path
+                  d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
+              </svg>
+              <div class="col-sm-6 com-md-12 col-lg-12 mb-2" style="margin-top: 5%;text-align: center;">
+                <span><small style="font-size: 17px;">No request found!</small></span>
+              </div>
+            </div>
+          </li>
+        </ul>
+        <hr />
+        <div class="row align-items-center">
+          <div class="text-center">
+            <button type="button" class="btn btn-primary" (click)="RedirectToHistory()">
+              View All Requests</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="card" *ngIf="requestData && IsShiftStarted && requestData.currentStageId > 0">
       <div class="card-body">
         <div class="row mb-3 align-items-center">
@@ -19,7 +52,8 @@
             <div class="float-left" style="color: #673ab7;">
               <span><small>REQUEST NUMBER</small></span>
               <h3>{{requestData.requestNumber}}</h3>
-              <span *ngIf="requestData.currentStageId == 2" class="float-left timer-text">{{ subscribeTimer * 1000 | date:'mm:ss':'UTC' }}</span>
+              <span *ngIf="requestData.currentStageId == 2" class="float-left timer-text">{{ subscribeTimer * 1000 |
+                date:'mm:ss':'UTC' }}</span>
             </div>
           </div>
 

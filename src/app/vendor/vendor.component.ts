@@ -185,6 +185,10 @@ export class VendorComponent {
     });
   }
 
+  RedirectToHistory() {
+    this.router.navigate(['/request-history']);
+  }
+  
   saveVendorLocation() {
     const data = {
       vendorId: localStorage.getItem("UserID"),
