@@ -49,7 +49,7 @@ export class VendorComponent {
   navCollapsedMob: boolean;
   windowWidth: number;
 
-  timeLeft: number = 3600;
+  timeLeft: number = 1800;
   subscribeTimer: any;
 
   requestData: any = {
@@ -114,7 +114,9 @@ export class VendorComponent {
     }
   }
 
+  IsCalled: boolean = false;
   observableTimer() {
+    this.IsCalled = true;
     const source = timer(1000, 1000);
     const abc = source.subscribe(val => {
       this.subscribeTimer = this.timeLeft - val;
@@ -140,6 +142,7 @@ export class VendorComponent {
           localStorage.setItem('_shiftId', res.data);
           this.saveVendorLocation();
           this.getGetVendorActiveRequest()
+
           this.timerSubscription = setInterval(() => {
             const res =
               this.saveVendorLocation();
@@ -164,7 +167,9 @@ export class VendorComponent {
           if (res.data) {
             this.requestData = res.data;
             console.log("Request Data", res.data);
-            this.observableTimer();
+            if (this.IsCalled == false) {
+              this.observableTimer();
+            }
           }
         }
         else {
