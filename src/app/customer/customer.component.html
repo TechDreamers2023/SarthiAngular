@@ -179,10 +179,10 @@
               <div class="col">
                 <button *ngIf="list.isCustomerAccepted == null" type="button" class="btn btn-success float-right"
                   (click)="Accept(this.customerId,list.quoationDetailId)">Send Request</button>
-                <button *ngIf="list.isCustomerAccepted == true" type="button" style="cursor: no-drop;"
+                <button *ngIf="list.isCustomerAccepted == true && list.isRejectedByVendor == null" type="button" style="cursor: no-drop;"
                   class="btn btn-warning float-right">Request Pending</button>
                 <button *ngIf="list.isRejectedByVendor == true" type="button" style="cursor: no-drop;"
-                  class="btn btn-warning float-right">Request Rejected</button>
+                  class="btn btn-danger float-right">Request Rejected</button>
               </div>
             </div>
           </li>
