@@ -60,10 +60,12 @@ export class MapDisplayComponent implements OnInit {
 
     if (toLocation) {
       this.gotoLocation(toLocation,"Drop Off","D");
-    }
+    } 
 
     if (fromLocation && toLocation) {
-      this.setRoutePolyline();
+      //Hide due to  multiple selection
+      // this.setRoutePolyline();
+
       if(this.stageId == 0)  {
       this.requestViewModel.currentlat = parseFloat(this.center.lat.toString());
       this.requestViewModel.currentlong = parseFloat(this.center.lng.toString());
@@ -90,8 +92,7 @@ export class MapDisplayComponent implements OnInit {
           }
           this.triggerRequestChanged.emit(info);
         }
-        console.log(response);
-      },
+       },
         (error) => {
           this.toastr.error("Something went wrong, Please try Again ") //error() callback
         },
