@@ -114,6 +114,9 @@ export class CustomerComponent {
               this.showLocationFilter = false;
             }
             else {
+              this.stageId = 0;
+              this.fromvalue = null;
+              this.tovalue = null;
               this.showLocationFilter = true;
             }
           }

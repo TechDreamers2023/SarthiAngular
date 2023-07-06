@@ -104,7 +104,7 @@
         </div>
       </div>
     </div>
-    <div class="card dashnum-card dashnum-card-small overflow-hidden" *ngIf="stageId == 0">
+    <div class="card dashnum-card dashnum-card-small overflow-hidden" *ngIf="(stageId == 0 || stageId > 3 )">
       <span class="round bg-warning small"></span>
       <span class="round bg-warning big"></span>
       <div class="card-body p-3">
@@ -198,6 +198,7 @@
   </div>
 
   <div class="col-xl-4 col-md-12">
+    
     <div class="card" *ngIf="stageId > 2 && stageId < 8">
       <div class="card-body">
         <div class="row mb-3 align-items-center">
