@@ -115,7 +115,7 @@ export class VendorComponent {
   }
 
   observableTimer() {
-    const source = timer(1000, 2000);
+    const source = timer(1000, 1000);
     const abc = source.subscribe(val => {
       this.subscribeTimer = this.timeLeft - val;
     });
