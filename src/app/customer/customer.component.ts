@@ -36,15 +36,13 @@ export class CustomerComponent {
     message: "",
     requestNumber: ""
   }
-
   modelInfo = {
     isSuccess: false,
     modelMessage: ""
   }
-
   title = 'appBootstrap';
   closeResult: string = '';
-
+  refershtimer:number = 10000;
   // Constructor
   constructor(private zone: NgZone,
     private location: Location,
@@ -78,7 +76,7 @@ export class CustomerComponent {
         this.statusSubscription = setInterval(() => {
           const res =
             this.getCurrentRequestStatus(this.customerId);
-        }, 3000);
+        }, this.refershtimer);
       }
     }
     else {
@@ -264,7 +262,7 @@ export class CustomerComponent {
     this.getCurrentRequestStatus(this.customerId);
     this.modelInfo = {
       isSuccess: data.isSuccess,
-      modelMessage: data.message
+      modelMessage: data.message 
     }
 
     let element: HTMLElement = document.getElementById('modelSuccess') as HTMLElement;
@@ -277,7 +275,7 @@ export class CustomerComponent {
       this.statusSubscription = setInterval(() => {
         const res =
           this.getCurrentRequestStatus(this.customerId);
-      }, 3000);
+      }, this.refershtimer);
     }
 
   }
@@ -324,7 +322,7 @@ export class CustomerComponent {
         this.tovalue = null;
         this.modelInfo = {
           isSuccess: true,
-          modelMessage: response.message
+          modelMessage: response.message 
         }
 
         let element: HTMLElement = document.getElementById('modelSuccess') as HTMLElement;

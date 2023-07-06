@@ -4,6 +4,7 @@ import { GoogleMap, MapDirectionsService, MapInfoWindow, MapMarker } from '@angu
 import { map } from 'rxjs';
 import { CustomerService } from 'src/app/services/customer/customer.service';
 import { ToastrService } from 'ngx-toastr';
+import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-map-display',
@@ -26,7 +27,7 @@ export class MapDisplayComponent implements OnInit {
     lat: 0,
     lng: 0
   };
-
+  isPermissionEnabled = true;
   markers: any = [];
   position = [];
   polylineOptions: any = {};
@@ -47,7 +48,8 @@ export class MapDisplayComponent implements OnInit {
   constructor(
     private directionService: MapDirectionsService,
     private customerService: CustomerService,
-    private toastr: ToastrService) {
+    private toastr: ToastrService,
+    private modalService: NgbModal) {
   }
 
   ngOnChanges() {
@@ -74,8 +76,6 @@ export class MapDisplayComponent implements OnInit {
       this.requestViewModel.dropOfflat = parseFloat(toLocation.lat().toString());
       this.requestViewModel.dropOfflong = parseFloat(toLocation.lng().toString());
       this.requestViewModel.userId = this.CustomerId;
-
-      console.log(this.requestViewModel);
 
       this.customerService.GenerateServiceRequest(this.requestViewModel).subscribe((response) => {
         if (response.status == 0 || response.status == 2) {
@@ -124,7 +124,6 @@ export class MapDisplayComponent implements OnInit {
   async ngOnInit() {
     this.CustomerId  = +localStorage.getItem("UserID");
     await this.getCurrentLocation();
-
   }
 
   getCurrentLocation() {
@@ -145,12 +144,21 @@ export class MapDisplayComponent implements OnInit {
               }
 
               let location = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-
+              this.isPermissionEnabled = true;
               this.gotoLocation(location,"Current Location","C")
               resolve(this.center);
             }
           },
-          (error) => this.toastr.error(error.message)
+          (error) => {
+            // this.toastr.error(error.message)
+          this.isPermissionEnabled = false;
+          let element: HTMLElement = document.getElementById('modelPermission') as HTMLElement;
+          // add this condition will solve issue  
+          if (element) {
+            element.click();
+          }
+          console.log(this.isPermissionEnabled);
+        }
         );
       } else {
         reject('Geolocation is not supported by this browser.');
@@ -169,5 +177,23 @@ export class MapDisplayComponent implements OnInit {
   openInfo(marker: MapMarker, content: string) {
     this.infoContent = content;
     this.info.open(marker)
+  }
+
+  open(content: any) {
+    this.modalService.open(content, { 
+      ariaLabelledBy: 'modal-basic-title',
+      backdrop: 'static'
+     }).result.then((result) => {
+     });
+  }
+
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
   }
 } 
