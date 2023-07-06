@@ -10,7 +10,7 @@
                         </div>
                     </div>
                     <div class="col-sm-6 com-md-6 col-lg-6">
-                        <div class="float-right" style="color: #673ab7;">
+                        <div class="float-right">
                             <!-- <span><small>STATUS</small></span><br> -->
                             <div class="alert  {{item.currentStageId == 8 ? 'alert-success' : 'alert-danger' }}"> {{item.stageName}}</div>
                             <!-- <button class="btn btn-sm {{item.currentStageId == 8 ? 'btn-success' : 'btn-danger' }}" >{{item.stageName}}</button> -->
@@ -83,9 +83,8 @@
                         </div>
                     </div>
                     <div class="col-sm-6 com-md-6 col-lg-6">
-                        <div class="float-right" style="color: #673ab7;">
-                            <span><small>STATUS</small></span>
-                            <h3>{{item.stageName}}</h3>
+                        <div class="float-right">
+                            <div class="alert  {{item.currentStageId == 8 ? 'alert-success' : 'alert-danger' }}"> {{item.stageName}}</div>
                         </div>
                     </div>
                 </div>
