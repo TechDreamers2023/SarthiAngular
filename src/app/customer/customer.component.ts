@@ -10,6 +10,10 @@ import { ToastrService } from 'ngx-toastr';
 import { Observable, Subscription, map, timer } from 'rxjs';
 import { Router } from '@angular/router';
 import { Title } from '@angular/platform-browser';
+import { InvoiceService } from '../services/common/pdf.service';
+import * as pdfMake from 'pdfmake/build/pdfmake';
+import * as pdfFonts from "pdfmake/build/vfs_fonts";
+(<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
 
 @Component({
   selector: 'app-customer',
@@ -50,7 +54,8 @@ export class CustomerComponent {
     private customerService: CustomerService,
     private toastr: ToastrService,
     private router: Router,
-    private modalService: NgbModal) {
+    private modalService: NgbModal,
+    private invoiceService: InvoiceService) {
 
     let current_url = this.location.path();
     if (this.location['_baseHref']) {
@@ -320,9 +325,11 @@ export class CustomerComponent {
       }
       else {
         this.stageId = 0;
-        this.getCurrentRequestStatus(this.customerId);
         this.fromvalue = null;
         this.tovalue = null;
+
+        this.getCurrentRequestStatus(this.customerId);
+        
         this.modelInfo = {
           isSuccess: true,
           modelMessage: response.message 
@@ -357,6 +364,11 @@ export class CustomerComponent {
     } else {
       return `with: ${reason}`;
     }
+  }
+
+  async GenerateInvoicePdf(requestId:number) {
+    var docDefinition = await this.invoiceService.generatePdf(this.vendorModel);
+    await pdfMake.createPdf(docDefinition).download("test.pdf");
   }
 }
 
