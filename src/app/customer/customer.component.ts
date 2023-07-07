@@ -63,7 +63,7 @@ export class CustomerComponent {
   }
   title = 'appBootstrap';
   closeResult: string = '';
-  refershtimer: number = 50000;
+  refershtimer: number = 20000;
   
   // Constructor
   constructor(private zone: NgZone,
@@ -147,14 +147,12 @@ export class CustomerComponent {
           if (this.responces.status == 0) {
             this.toastr.error(response.message)
           }
-
-           
+ 
           if (this.responces.status == 2) {
             this.showLocationFilter = true;
             this.stageId = 0;  
             this.fromvalue = null;
             this.tovalue = null;
-
             this.loadPastHistoryServiceRequest();
             clearInterval(this.statusSubscription);
           }
@@ -285,6 +283,22 @@ export class CustomerComponent {
               requestNumber: response.data.requestNumber,
               message: message
             }
+
+            if(localStorage.getItem("RequestStatus") != undefined){
+              if(localStorage.getItem("RequestStatus") == "1"){
+                this.isrefreshed = true;
+                localStorage.setItem("RequestStatus",undefined) ;
+                this.modelInfo = {
+                  isSuccess: response.data.pastStageId == 8 ?true : false,
+                  modelMessage: message
+                }
+            
+                let element: HTMLElement = document.getElementById('modelSuccess') as HTMLElement;
+                 if (element) {
+                  element.click();
+                }
+               }
+          }
           }
           else {
             this.pastHistoryModel = {

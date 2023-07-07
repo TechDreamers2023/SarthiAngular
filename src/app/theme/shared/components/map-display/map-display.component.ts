@@ -54,7 +54,7 @@ export class MapDisplayComponent implements OnInit {
     private toastr: ToastrService,
     private modalService: NgbModal ) {
   }
- 
+  
   ngOnChanges() {
     const fromLocation = this.from?.location;
     const toLocation = this.to?.location;
