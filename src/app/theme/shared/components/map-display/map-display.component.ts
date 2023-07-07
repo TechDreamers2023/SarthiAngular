@@ -66,7 +66,7 @@ export class MapDisplayComponent implements OnInit {
 
     if (fromLocation && toLocation) {
       //Hide due to  multiple selection
-      // this.setRoutePolyline();
+      this.setRoutePolyline();
 
       if(this.stageId == 0)  {
       this.requestViewModel.currentlat = parseFloat(this.center.lat.toString());

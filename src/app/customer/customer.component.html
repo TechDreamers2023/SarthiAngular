@@ -118,7 +118,7 @@
           <div class="ms-2">
             <h4 class="mb-1">Drop Off <i class="ti ti-arrow-down-right-circle opacity-50"></i></h4>
             <p *ngIf="stageId == 0 " class="mb-0 opacity-50 text-sm">No Information Available</p>
-            <p *ngIf="stageId > 1 " class="mb-0 opacity-50 text-sm">{{vendorModel.dropOffLocation.address}}</p>
+            <p *ngIf="stageId > 1 && vendorModel.dropOffLocation != null " class="mb-0 opacity-50 text-sm">{{vendorModel.dropOffLocation.address}}</p>
           </div>
         </div>
       </div>

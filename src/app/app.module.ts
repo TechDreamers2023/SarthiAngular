@@ -17,13 +17,14 @@ import { NavItemComponent } from './theme/layout/admin/navigation/nav-content/na
 import { SharedModule } from './theme/shared/shared.module';
 import { ConfigurationComponent } from './theme/layout/admin/configuration/configuration.component';
 import { GuestComponent } from './theme/layout/guest/guest.component';
-import {  HttpClientModule } from '@angular/common/http';
+import {  HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { ToastrModule } from 'ngx-toastr';
 import { ProfileComponent } from './profile/profile.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { RequestHistoryComponent } from './history/request-history/request-history.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { LoadingInterceptor } from './loading.interceptor';
 
 @NgModule({
   declarations: [
@@ -56,7 +57,14 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
     ToastrModule.forRoot(),
   ],
-  providers: [NavigationItem],
+  providers: [
+    {
+      provide:NavigationItem
+    },
+    {
+      provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true
+    }
+  ],
    
   bootstrap: [AppComponent]
 })

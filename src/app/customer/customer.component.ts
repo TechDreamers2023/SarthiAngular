@@ -29,7 +29,20 @@ export class CustomerComponent {
   windowWidth: number;
   customerId: number;
   customerTypeId: number;
-  vendorModel: RequestVendorModel;
+  vendorModel: RequestVendorModel ={
+    distanceKM:0,
+    currentLocation: null, 
+    currentStageId:0, 
+    dropOffLocation: null,
+    durationInMins: "",
+    expireDateTime: null,
+    pickupLocation: null,
+    UserId: 0,
+    requestNumber:"",
+    requestId : 0,
+    vendorDetails: null,
+  };
+
   statusSubscription!: any;
   responces: any;
   showLocationFilter: boolean = true;
