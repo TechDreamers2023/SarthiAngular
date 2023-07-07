@@ -367,8 +367,19 @@ export class CustomerComponent {
   }
 
   async GenerateInvoicePdf(requestId:number) {
+    var filename = this.vendorModel.requestNumber + ".pdf";
     var docDefinition = await this.invoiceService.generatePdf(this.vendorModel);
-    await pdfMake.createPdf(docDefinition).download("test.pdf");
+    await pdfMake.createPdf(docDefinition).download(filename);
+    this.modelInfo = {
+      isSuccess: true,
+      modelMessage: "Invoice downloaded successfully." 
+    }
+
+    let element: HTMLElement = document.getElementById('modelSuccess') as HTMLElement;
+    // add this condition will solve issue  
+    if (element) {
+      element.click();
+    }
   }
 }
 
