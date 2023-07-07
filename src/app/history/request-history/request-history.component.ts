@@ -34,7 +34,7 @@ export class RequestHistoryComponent {
             console.log(res.data);
           }
         }
-        else {
+        else if(res.status == 0) {
           if (res.message) {
             this.toastr.error(res.message, 'Error!');
           }

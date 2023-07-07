@@ -12,7 +12,8 @@
                     <div class="col-sm-6 com-md-6 col-lg-6">
                         <div class="float-right">
                             <!-- <span><small>STATUS</small></span><br> -->
-                            <div class="alert  {{item.currentStageId == 8 ? 'alert-success' : 'alert-danger' }}"> {{item.stageName}}</div>
+                            <div class="alert  {{item.currentStageId == 8 ? 'alert-success' : 'alert-danger' }}">
+                                {{item.stageName}}</div>
                             <!-- <button class="btn btn-sm {{item.currentStageId == 8 ? 'btn-success' : 'btn-danger' }}" >{{item.stageName}}</button> -->
 
                         </div>
@@ -84,7 +85,8 @@
                     </div>
                     <div class="col-sm-6 com-md-6 col-lg-6">
                         <div class="float-right">
-                            <div class="alert  {{item.currentStageId == 8 ? 'alert-success' : 'alert-danger' }}"> {{item.stageName}}</div>
+                            <div class="alert  {{item.currentStageId == 8 ? 'alert-success' : 'alert-danger' }}">
+                                {{item.stageName}}</div>
                         </div>
                     </div>
                 </div>
@@ -143,6 +145,13 @@
                         <h4>{{item.dropOffLocation}}</h4>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+    <div class="norecordhis col-sm-12" *ngIf="requestData.length == 0">
+        <div class="card">
+            <div class="card-body" style="font-size: 16px;">
+                No Records Found
             </div>
         </div>
     </div>

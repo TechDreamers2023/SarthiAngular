@@ -174,6 +174,7 @@ export class MapDisplayComponent implements OnInit {
       strokeWeight: 2,
     };
   }
+  
   openInfo(marker: MapMarker, content: string) {
     this.infoContent = content;
     this.info.open(marker)
