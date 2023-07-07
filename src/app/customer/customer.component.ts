@@ -1,6 +1,6 @@
 // Angular Import
 import { Component, NgZone, OnInit, ViewChild } from '@angular/core';
-import { PastHistoryModel, PlaceSearchResult, RequestPostViewModel, RequestRejectViewModel, RequestVendorDetailsModel, RequestVendorModel, TrackServiceModel } from './model/place-search-result';
+import { PastHistoryModel, PlaceSearchResult, RequestPostViewModel, RequestRejectViewModel, RequestVendorDetailsModel, RequestVendorModel, TrackServiceModel, VPlaceSearchResult, VendorsPlaceSearchResult } from './model/place-search-result';
 import { Location, LocationStrategy } from '@angular/common';
 import { SharedModule } from 'src/app/theme/shared/shared.module';
 import { ModalDismissReasons, NgbActiveModal, NgbModal, NgbNavChangeEvent } from '@ng-bootstrap/ng-bootstrap';
@@ -13,7 +13,7 @@ import { Title } from '@angular/platform-browser';
 import { InvoiceService } from '../services/common/pdf.service';
 import * as pdfMake from 'pdfmake/build/pdfmake';
 import * as pdfFonts from "pdfmake/build/vfs_fonts";
-(<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
+ (<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
 
 @Component({
   selector: 'app-customer',
@@ -29,20 +29,24 @@ export class CustomerComponent {
   windowWidth: number;
   customerId: number;
   customerTypeId: number;
-  vendorModel: RequestVendorModel ={
-    distanceKM:0,
-    currentLocation: null, 
-    currentStageId:0, 
+  vendorModel: RequestVendorModel = {
+    distanceKM: 0,
+    currentLocation: null,
+    currentStageId: 0,
     dropOffLocation: null,
     durationInMins: "",
     expireDateTime: null,
     pickupLocation: null,
     UserId: 0,
-    requestNumber:"",
-    requestId : 0,
+    requestNumber: "",
+    requestId: 0,
     vendorDetails: null,
   };
-
+  distance: number = 0;
+  vendorLocation: VendorsPlaceSearchResult = {
+    vendors: []
+  } 
+  isrefreshed: boolean = false;
   statusSubscription!: any;
   responces: any;
   showLocationFilter: boolean = true;
@@ -59,7 +63,8 @@ export class CustomerComponent {
   }
   title = 'appBootstrap';
   closeResult: string = '';
-  refershtimer:number = 10000;
+  refershtimer: number = 50000;
+  
   // Constructor
   constructor(private zone: NgZone,
     private location: Location,
@@ -143,8 +148,13 @@ export class CustomerComponent {
             this.toastr.error(response.message)
           }
 
+           
           if (this.responces.status == 2) {
             this.showLocationFilter = true;
+            this.stageId = 0;  
+            this.fromvalue = null;
+            this.tovalue = null;
+
             this.loadPastHistoryServiceRequest();
             clearInterval(this.statusSubscription);
           }
@@ -164,25 +174,42 @@ export class CustomerComponent {
           if (response.status == 1) {
             this.vendorModel = response.data;
             this.stageId = 2;
+            this.distance = response.data.distanceKM;
           }
         },
         (error) => {
           this.toastr.error("Something went wrong, Please try Again ")
         },
         () => {
-          let pickUp: PlaceSearchResult =
-          {
-            location: new google.maps.LatLng(this.vendorModel.pickupLocation.latitude, this.vendorModel.pickupLocation.longitude),
-            address: this.vendorModel.pickupLocation.address
-          };
-          this.fromvalue = pickUp;
-
-          let dropOff: PlaceSearchResult =
-          {
-            location: new google.maps.LatLng(this.vendorModel.dropOffLocation.latitude, this.vendorModel.dropOffLocation.longitude),
-            address: this.vendorModel.dropOffLocation.address
-          };
-          this.tovalue = dropOff;
+          if (this.fromvalue == null) {
+            let pickUp: PlaceSearchResult =
+            {
+              location: new google.maps.LatLng(this.vendorModel.pickupLocation.latitude, this.vendorModel.pickupLocation.longitude),
+              address: this.vendorModel.pickupLocation.address
+            };
+            this.fromvalue = pickUp;
+          }
+          if (this.tovalue == null) {
+            let dropOff: PlaceSearchResult =
+            {
+              location: new google.maps.LatLng(this.vendorModel.dropOffLocation.latitude, this.vendorModel.dropOffLocation.longitude),
+              address: this.vendorModel.dropOffLocation.address
+            };
+            this.tovalue = dropOff;
+          }
+          console.log(this.vendorLocation.vendors.length == 0)
+          if (this.vendorLocation.vendors.length == 0) {
+            this.vendorModel.vendorDetails.forEach(element => {
+              console.log(element)
+              let vendorlocation: VPlaceSearchResult =
+              {
+                location: new google.maps.LatLng(element.latitude, element.longitude),
+                name: element.firstName + " " + element.lastName
+              };
+              this.vendorLocation.vendors.push(vendorlocation);
+            });
+            console.log(this.vendorLocation);
+          }
         })
   }
 
@@ -237,9 +264,7 @@ export class CustomerComponent {
   loadPastHistoryServiceRequest() {
     this.customerService.GetPastTrackServiceRequest(this.customerId)
       .subscribe(
-        (response) => {
-          console.log(response);
-          console.log(this.stageId);
+        (response) => { 
           if (response.status == 1) {
             let message: string;
 
@@ -283,7 +308,7 @@ export class CustomerComponent {
     this.getCurrentRequestStatus(this.customerId);
     this.modelInfo = {
       isSuccess: data.isSuccess,
-      modelMessage: data.message 
+      modelMessage: data.message
     }
 
     let element: HTMLElement = document.getElementById('modelSuccess') as HTMLElement;
@@ -333,6 +358,7 @@ export class CustomerComponent {
     this.requestRejectViewModel.customerId = customerId;
     this.requestRejectViewModel.requestId = requestId;
     this.customerService.RejectRequestByCustomer(this.requestRejectViewModel).subscribe(response => {
+     console.log(response);
       if (response.status == 0 || response.status == 2) {
         this.toastr.error(response.message);
       }
@@ -340,12 +366,12 @@ export class CustomerComponent {
         this.stageId = 0;
         this.fromvalue = null;
         this.tovalue = null;
+        this.isrefreshed = true;
 
         this.getCurrentRequestStatus(this.customerId);
-        
         this.modelInfo = {
           isSuccess: true,
-          modelMessage: response.message 
+          modelMessage: response.message
         }
 
         let element: HTMLElement = document.getElementById('modelSuccess') as HTMLElement;
@@ -379,19 +405,32 @@ export class CustomerComponent {
     }
   }
 
-  async GenerateInvoicePdf(requestId:number) {
+  async GenerateInvoicePdf(requestId: number) {
     var filename = this.vendorModel.requestNumber + ".pdf";
     var docDefinition = await this.invoiceService.generatePdf(this.vendorModel);
     await pdfMake.createPdf(docDefinition).download(filename);
     this.modelInfo = {
       isSuccess: true,
-      modelMessage: "Invoice downloaded successfully." 
+      modelMessage: "Invoice downloaded successfully."
     }
 
     let element: HTMLElement = document.getElementById('modelSuccess') as HTMLElement;
     // add this condition will solve issue  
     if (element) {
       element.click();
+    }
+  }
+
+  refresh() {
+    if (this.isrefreshed) {
+      window.location.reload();
+    }
+    else{
+      let element: HTMLElement = document.getElementById('btnclose') as HTMLElement;
+      // add this condition will solve issue  
+      if (element) {
+        element.click();
+      }
     }
   }
 }

@@ -146,12 +146,12 @@ export class VendorComponent {
           this.timerSubscription = setInterval(() => {
             const res =
               this.saveVendorLocation();
-          }, 3000);
+          }, 30000);
 
           this.vendorStatusSubscription = setInterval(() => {
             const res =
               this.getGetVendorActiveRequest();
-          }, 3000);
+          }, 30000);
         }
       },
       error: err => {

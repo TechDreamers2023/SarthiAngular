@@ -118,7 +118,8 @@
           <div class="ms-2">
             <h4 class="mb-1">Drop Off <i class="ti ti-arrow-down-right-circle opacity-50"></i></h4>
             <p *ngIf="stageId == 0 " class="mb-0 opacity-50 text-sm">No Information Available</p>
-            <p *ngIf="stageId > 1 && vendorModel.dropOffLocation != null " class="mb-0 opacity-50 text-sm">{{vendorModel.dropOffLocation.address}}</p>
+            <p *ngIf="stageId > 1 && vendorModel.dropOffLocation != null " class="mb-0 opacity-50 text-sm">
+              {{vendorModel.dropOffLocation.address}}</p>
           </div>
         </div>
       </div>
@@ -129,7 +130,7 @@
     <div class="card">
       <div class="card-body">
         <app-map-display (triggerRequestChanged)=ontriggerRequestChanged($event) [from]="fromvalue" [to]="tovalue"
-          [stageId]="stageId"></app-map-display>
+          [vendor]="vendorLocation" [distance]="distance" [stageId]="stageId"></app-map-display>
       </div>
     </div>
   </div>
@@ -176,11 +177,86 @@
               </div>
             </div>
             <div class="row align-items-start">
+              <div style="width: 50%;" >
+                <div class="MuiTableCell-root MuiTableCell-body MuiTableCell-alignCenter MuiTableCell-sizeMedium css-wghn2m">
+                  <span class="MuiRating-root MuiRating-sizeMedium MuiRating-readyOnly css-1fwwzvr" role="img"
+                    aria-label="3.5 Stars"><span class="MuiRating-decimal css-79elbk"><span
+                        style="width: 0%; overflow: hidden; position: absolute;"><span
+                          class="MuiRating-icon MuiRating-iconFilled css-13m1if9"><svg
+                            class="MuiSvgIcon-root MuiSvgIcon-fontSizeInherit css-1cw4hi4" focusable="false"
+                            aria-hidden="true" viewBox="0 0 24 24" data-testid="StarIcon">
+                            <path
+                              d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z">
+                            </path>
+                          </svg></span></span><span><span class="MuiRating-icon MuiRating-iconFilled css-13m1if9"><svg
+                            class="MuiSvgIcon-root MuiSvgIcon-fontSizeInherit css-1cw4hi4" focusable="false"
+                            aria-hidden="true" viewBox="0 0 24 24" data-testid="StarIcon">
+                            <path
+                              d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z">
+                            </path>
+                          </svg></span></span></span><span class="MuiRating-decimal css-79elbk"><span
+                        style="width: 0%; overflow: hidden; position: absolute;"><span
+                          class="MuiRating-icon MuiRating-iconFilled css-13m1if9"><svg
+                            class="MuiSvgIcon-root MuiSvgIcon-fontSizeInherit css-1cw4hi4" focusable="false"
+                            aria-hidden="true" viewBox="0 0 24 24" data-testid="StarIcon">
+                            <path
+                              d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z">
+                            </path>
+                          </svg></span></span><span><span class="MuiRating-icon MuiRating-iconFilled css-13m1if9"><svg
+                            class="MuiSvgIcon-root MuiSvgIcon-fontSizeInherit css-1cw4hi4" focusable="false"
+                            aria-hidden="true" viewBox="0 0 24 24" data-testid="StarIcon">
+                            <path
+                              d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z">
+                            </path>
+                          </svg></span></span></span><span class="MuiRating-decimal css-79elbk"><span
+                        style="width: 0%; overflow: hidden; position: absolute;"><span
+                          class="MuiRating-icon MuiRating-iconFilled css-13m1if9"><svg
+                            class="MuiSvgIcon-root MuiSvgIcon-fontSizeInherit css-1cw4hi4" focusable="false"
+                            aria-hidden="true" viewBox="0 0 24 24" data-testid="StarIcon">
+                            <path
+                              d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z">
+                            </path>
+                          </svg></span></span><span><span class="MuiRating-icon MuiRating-iconFilled css-13m1if9"><svg
+                            class="MuiSvgIcon-root MuiSvgIcon-fontSizeInherit css-1cw4hi4" focusable="false"
+                            aria-hidden="true" viewBox="0 0 24 24" data-testid="StarIcon">
+                            <path
+                              d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z">
+                            </path>
+                          </svg></span></span></span><span class="MuiRating-decimal css-79elbk"><span
+                        style="width: 50%; overflow: hidden; position: absolute;"><span
+                          class="MuiRating-icon MuiRating-iconFilled css-13m1if9"><svg
+                            class="MuiSvgIcon-root MuiSvgIcon-fontSizeInherit css-1cw4hi4" focusable="false"
+                            aria-hidden="true" viewBox="0 0 24 24" data-testid="StarIcon">
+                            <path
+                              d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z">
+                            </path>
+                          </svg></span></span><span><span class="MuiRating-icon MuiRating-iconEmpty css-1xh6k8t"><svg
+                            class="MuiSvgIcon-root MuiSvgIcon-fontSizeInherit css-1cw4hi4" focusable="false"
+                            aria-hidden="true" viewBox="0 0 24 24" data-testid="StarBorderIcon">
+                            <path
+                              d="M22 9.24l-7.19-.62L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.63-7.03L22 9.24zM12 15.4l-3.76 2.27 1-4.28-3.32-2.88 4.38-.38L12 6.1l1.71 4.04 4.38.38-3.32 2.88 1 4.28L12 15.4z">
+                            </path>
+                          </svg></span></span></span><span class="MuiRating-decimal css-79elbk"><span
+                        style="width: 0%; overflow: hidden; position: absolute;"><span
+                          class="MuiRating-icon MuiRating-iconEmpty css-1xh6k8t"><svg
+                            class="MuiSvgIcon-root MuiSvgIcon-fontSizeInherit css-1cw4hi4" focusable="false"
+                            aria-hidden="true" viewBox="0 0 24 24" data-testid="StarBorderIcon">
+                            <path
+                              d="M22 9.24l-7.19-.62L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.63-7.03L22 9.24zM12 15.4l-3.76 2.27 1-4.28-3.32-2.88 4.38-.38L12 6.1l1.71 4.04 4.38.38-3.32 2.88 1 4.28L12 15.4z">
+                            </path>
+                          </svg></span></span><span><span class="MuiRating-icon MuiRating-iconEmpty css-1xh6k8t"><svg
+                            class="MuiSvgIcon-root MuiSvgIcon-fontSizeInherit css-1cw4hi4" focusable="false"
+                            aria-hidden="true" viewBox="0 0 24 24" data-testid="StarBorderIcon">
+                            <path
+                              d="M22 9.24l-7.19-.62L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.63-7.03L22 9.24zM12 15.4l-3.76 2.27 1-4.28-3.32-2.88 4.38-.38L12 6.1l1.71 4.04 4.38.38-3.32 2.88 1 4.28L12 15.4z">
+                            </path>
+                          </svg></span></span></span></span></div>
+              </div>
               <div class="col">
                 <button *ngIf="list.isCustomerAccepted == null" type="button" class="btn btn-success float-right"
                   (click)="Accept(this.customerId,list.quoationDetailId)">Send Request</button>
-                <button *ngIf="list.isCustomerAccepted == true && list.isRejectedByVendor == null" type="button" style="cursor: no-drop;"
-                  class="btn btn-warning float-right">Request Pending</button>
+                <button *ngIf="list.isCustomerAccepted == true && list.isRejectedByVendor == null" type="button"
+                  style="cursor: no-drop;" class="btn btn-warning float-right">Request Pending</button>
                 <button *ngIf="list.isRejectedByVendor == true" type="button" style="cursor: no-drop;"
                   class="btn btn-danger float-right">Request Rejected</button>
               </div>
@@ -211,7 +287,7 @@
           </div>
           <div class="ms-2">
             <h4 class="mb-1">Drop Off <i class="ti ti-arrow-down-right-circle opacity-50"></i></h4>
-             <p class="mb-0 opacity-50 text-sm">{{vendorModel.dropOffLocation.address}}</p>
+            <p class="mb-0 opacity-50 text-sm">{{vendorModel.dropOffLocation.address}}</p>
           </div>
         </div>
       </div>
@@ -257,7 +333,7 @@
             <div class="row align-items-start" *ngIf="stageId < 4">
               <div class="col rejectButton">
                 <button type="button" class="btn btn-danger"
-                  (click)="Accept(this.customerId,list.quoationDetailId)">Cancel Request</button>
+                  (click)="CancelRequest(this.customerId,vendorModel.requestId)">Cancel Request</button>
               </div>
             </div>
             <div class="row align-items-start" *ngIf="stageId == 6">
@@ -492,6 +568,7 @@
     </div>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Close</button>
+    <button type="button" class="btn btn-outline-dark" (click)="refresh()">Close</button>
+    <button type="button" id="btnclose" style="display: none;" class="btn btn-outline-dark" (click)="modal.close('Save click')">Close</button>
   </div>
 </ng-template>
