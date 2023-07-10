@@ -1,11 +1,11 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { PlaceSearchResult, RequestViewModel } from '../../../../customer/model/place-search-result';
+import { PlaceSearchResult, RequestViewModel, VPlaceSearchResult, VendorsPlaceSearchResult } from '../../../../customer/model/place-search-result';
 import { GoogleMap, MapDirectionsService, MapInfoWindow, MapMarker } from '@angular/google-maps';
 import { map } from 'rxjs';
 import { CustomerService } from 'src/app/services/customer/customer.service';
 import { ToastrService } from 'ngx-toastr';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
-
+ 
 @Component({
   selector: 'app-map-display',
   templateUrl: './map-display.component.html',
@@ -13,14 +13,16 @@ import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 })
 
 export class MapDisplayComponent implements OnInit {
-  zoom = 5;
+  zoom = 50;
   @ViewChild('myGoogleMap', { static: false })
-  map!: GoogleMap;
-
+  map!: GoogleMap; 
   @Input() stageId: number = 0;
   @Input() from: PlaceSearchResult | undefined;
   @Input() to: PlaceSearchResult | undefined;
+  @Input() vendor: VendorsPlaceSearchResult  | undefined;
+  @Input() distance : number = 0;
   @Output() triggerRequestChanged = new EventEmitter<any>();
+   
   markerPositions: google.maps.LatLng[] = [];
   mapOptions: google.maps.MapOptions;
   center = {
@@ -34,12 +36,13 @@ export class MapDisplayComponent implements OnInit {
   currentLat: number;
   currentlong: number;
   CustomerId: number;
-
+  Coordinates = []; 
   options: google.maps.MapOptions = {
     zoomControl: true,
     scrollwheel: true,
     disableDoubleClickZoom: true,
-    minZoom: 5,
+    minZoom: 15,
+    maxZoom:20
   };
   info!: MapInfoWindow;
   infoContent = ''
@@ -49,9 +52,9 @@ export class MapDisplayComponent implements OnInit {
     private directionService: MapDirectionsService,
     private customerService: CustomerService,
     private toastr: ToastrService,
-    private modalService: NgbModal) {
+    private modalService: NgbModal ) {
   }
-
+  
   ngOnChanges() {
     const fromLocation = this.from?.location;
     const toLocation = this.to?.location;
@@ -62,11 +65,17 @@ export class MapDisplayComponent implements OnInit {
 
     if (toLocation) {
       this.gotoLocation(toLocation,"Drop Off","D");
-    } 
+    }  
+
+    if(this.vendor.vendors != undefined && this.vendor.vendors.length > 0){
+      this.vendor.vendors.forEach(element => {
+        this.gotoLocation(element.location,"Vendor",element.name);
+        });
+    }  
 
     if (fromLocation && toLocation) {
       //Hide due to  multiple selection
-      // this.setRoutePolyline();
+      this.setRoutePolyline();
 
       if(this.stageId == 0)  {
       this.requestViewModel.currentlat = parseFloat(this.center.lat.toString());
@@ -91,6 +100,7 @@ export class MapDisplayComponent implements OnInit {
             message: response.message
           }
           this.triggerRequestChanged.emit(info);
+          localStorage.setItem("RequestStatus","1");
         }
        },
         (error) => {
@@ -118,12 +128,15 @@ export class MapDisplayComponent implements OnInit {
       info: title,
       zoomControl: true,
       scrollwheel: true,
+      center: this.center,
+      zoom: (this.distance > 0 ? (this.distance <  13 ? 11 : 13 ) : 17),
     })  
   }
 
   async ngOnInit() {
     this.CustomerId  = +localStorage.getItem("UserID");
     await this.getCurrentLocation();
+    console.log(this.distance);
   }
 
   getCurrentLocation() {debugger
@@ -138,7 +151,7 @@ export class MapDisplayComponent implements OnInit {
               };
               this.mapOptions = {
                 center: this.center,
-                zoom: 17,
+                zoom: (this.distance > 0 ? (this.distance <  13 ? 11 : 13 ) : 17),
                 zoomControl: true,
                 scrollwheel: true,
               }
@@ -167,13 +180,25 @@ export class MapDisplayComponent implements OnInit {
   }
 
   setRoutePolyline() {
+     const fromLocationlat = this.from?.location.lat();
+     const fromLocationlong = this.from?.location.lng();
+      const toLocationlat = this.to?.location.lat();
+      const toLocationlong = this.to?.location.lng();
+
+     this.Coordinates = [
+      { lat: fromLocationlat,lng : fromLocationlong},
+      { lat: toLocationlat, lng : toLocationlong },
+     ]; 
+
     this.polylineOptions = {
-      path: this.position.slice(1),
+      path: this.stageId > 0 ? this.Coordinates : this.position,
       strokeColor: 'blue',
       strokeOpacity: 1.0,
       strokeWeight: 2,
+      geodesic: true,
     };
   }
+
   openInfo(marker: MapMarker, content: string) {
     this.infoContent = content;
     this.info.open(marker)

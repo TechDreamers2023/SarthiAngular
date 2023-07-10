@@ -3,6 +3,15 @@ export interface PlaceSearchResult {
     address: string;
 }
 
+export interface VPlaceSearchResult {
+    location?: google.maps.LatLng;
+    name: string;
+}
+
+export interface VendorsPlaceSearchResult {
+    vendors?: VPlaceSearchResult[]  
+}
+
 export class RequestViewModel {
     currentlat: number;
     currentlong: number;

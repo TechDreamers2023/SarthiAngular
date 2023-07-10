@@ -49,7 +49,6 @@ get password() {
       .subscribe(
         (response) => {                           //next() callback
           this.responces = response;
-          console.log(response);
           if (this.responces.status == 1) {
             if (this.responces.data[0].usertypeId === 2 ||
               this.responces.data[0].usertypeId ===  4) {
