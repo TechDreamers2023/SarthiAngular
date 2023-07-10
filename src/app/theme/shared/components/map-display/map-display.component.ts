@@ -126,7 +126,7 @@ export class MapDisplayComponent implements OnInit {
     await this.getCurrentLocation();
   }
 
-  getCurrentLocation() {
+  getCurrentLocation() {debugger
     return new Promise((resolve, reject) => {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
@@ -149,7 +149,7 @@ export class MapDisplayComponent implements OnInit {
               resolve(this.center);
             }
           },
-          (error) => {
+          (error) => {debugger
             // this.toastr.error(error.message)
           this.isPermissionEnabled = false;
           let element: HTMLElement = document.getElementById('modelPermission') as HTMLElement;
